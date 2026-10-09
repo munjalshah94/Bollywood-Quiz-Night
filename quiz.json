@@ -1,0 +1,1625 @@
+{
+ "title": "Bollywood Quiz Night",
+ "startLabel": "START THE SHOW",
+ "titleImage": {
+  "src": "assets/image1.webp",
+  "w": 1600,
+  "h": 900,
+  "file": "image1.webp",
+  "source": "/mnt/data/a_wide_pastel_bollywood_cinema_themed_festive_ill.png",
+  "deckMedia": "image1.png (cropped)"
+ },
+ "hostNotes": {
+  "kicker": "HOST NOTES",
+  "title": "GAME FLOW + SCORING",
+  "text": "Round 1: Jeoparty board, 5 categories x 6 clues.\nRound 2: Guess the movie from emojis.\nRound 3: Guess the song from the second verse.\nRound 4: Charades with a 30-second timer.\nRound 5: Endgame.",
+  "images": [
+   {
+    "src": "assets/image2.webp",
+    "w": 467,
+    "h": 552,
+    "file": "image2.webp",
+    "deckMedia": "image2.png"
+   }
+  ]
+ },
+ "passPoints": 10,
+ "rounds": [
+  {
+   "id": 1,
+   "name": "LIGHTS, CAMERA, CONFUSION",
+   "type": "board",
+   "introTitle": "LIGHTS, CAMERA, CONFUSION",
+   "rules": "Rules:\nFive categories: Six questions per category.\nCan get bonus points depending upon the question!\nQuestions pass from one team to another (+10 points for pass)\nHave fun!!",
+   "categories": [
+    {
+     "name": "Badly Explained Blockbusters",
+     "tagline": "Terrible plot descriptions",
+     "color": "#6E1E3B",
+     "clues": [
+      {
+       "points": 10,
+       "label": "IDENTIFY THE MOVIE",
+       "prompt": "A group of broke men discover that every financial problem can be made worse by answering the phone.",
+       "answer": "Hera Pheri (2000)",
+       "clueImages": [],
+       "answerImages": [
+        {
+         "src": "assets/image4.webp",
+         "w": 632,
+         "h": 351,
+         "file": "image4.webp",
+         "source": "Hera Pheri 3 Controversy; Ownership Rights Dispute | Bollywood Court Case  India",
+         "deckMedia": "image4.jpeg"
+        },
+        {
+         "src": "assets/image3.webp",
+         "w": 1080,
+         "h": 608,
+         "file": "image3.webp",
+         "source": "Prime Video: Hera Pheri",
+         "deckMedia": "image3.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 6,
+        "answer": 7
+       },
+       "id": "r1-0-10"
+      },
+      {
+       "points": 20,
+       "label": "IDENTIFY THE MOVIE",
+       "prompt": "Man develops split personality disorder to impress his wife and ends up winning a dance competition.",
+       "answer": "Rab ne Bana Di Jodi (2008)",
+       "clueImages": [],
+       "answerImages": [
+        {
+         "src": "assets/image5.webp",
+         "w": 776,
+         "h": 1072,
+         "file": "image5.webp",
+         "source": "Rab Ne Bana Di Jodi (2008) - IMDb",
+         "deckMedia": "image5.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 8,
+        "answer": 9
+       },
+       "id": "r1-0-20"
+      },
+      {
+       "points": 40,
+       "label": "IDENTIFY THE MOVIE",
+       "prompt": "The protagonist comes up with the most elaborate comeback for vandalism done on his wall by a kid.",
+       "answer": "Chak de India! (2007)",
+       "clueImages": [],
+       "answerImages": [
+        {
+         "src": "assets/image7.webp",
+         "w": 1023,
+         "h": 466,
+         "file": "image7.webp",
+         "source": "Pakistan betrayed #Iran",
+         "deckMedia": "image7.jpeg"
+        },
+        {
+         "src": "assets/image6.webp",
+         "w": 270,
+         "h": 369,
+         "file": "image6.webp",
+         "source": "Chak De! India - Wikipedia",
+         "deckMedia": "image6.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 10,
+        "answer": 11
+       },
+       "id": "r1-0-40"
+      },
+      {
+       "points": 60,
+       "label": "IDENTIFY THE MOVIE",
+       "prompt": "A woman dies before sitting through another Indian wedding.",
+       "answer": "Hum Aapke Hain Koun? (1994)",
+       "clueImages": [],
+       "answerImages": [
+        {
+         "video": {
+          "webm": "assets/image9.webm",
+          "mp4": "assets/image9.mp4",
+          "poster": "assets/image9-poster.webp"
+         },
+         "w": 400,
+         "h": 300,
+         "file": "image9.webm",
+         "source": "Hum Aapke Hain Koun! - 15/17 - Bollywood Movie - Salman Khan & Madhuri  Dixit on Make a GIF",
+         "deckMedia": "image9.gif"
+        },
+        {
+         "src": "assets/image8.webp",
+         "w": 1035,
+         "h": 1496,
+         "file": "image8.webp",
+         "source": "Hum Aapke Hain Koun..! (1994) - IMDb",
+         "deckMedia": "image8.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 12,
+        "answer": 13
+       },
+       "id": "r1-0-60"
+      },
+      {
+       "points": 100,
+       "label": "IDENTIFY THE MOVIE",
+       "prompt": "There's a ton of music and dancing in large groups. One person is enjoying life to the point of hallucination while the other is too stuck in their own ways.",
+       "answer": "Mohabbatein (2000)",
+       "clueImages": [],
+       "answerImages": [
+        {
+         "src": "assets/image11.webp",
+         "w": 1280,
+         "h": 720,
+         "file": "image11.webp",
+         "source": "20 years of 'Mohabbatein': 'We weren't supposed to know whether Aishwarya  was Shah Rukh's imagination', recalls Farah",
+         "deckMedia": "image11.jpeg"
+        },
+        {
+         "src": "assets/image10.webp",
+         "w": 250,
+         "h": 342,
+         "file": "image10.webp",
+         "source": "Mohabbatein - Wikipedia",
+         "deckMedia": "image10.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 14,
+        "answer": 15
+       },
+       "id": "r1-0-100"
+      },
+      {
+       "points": 150,
+       "label": "IDENTIFY THE MOVIE",
+       "prompt": "Dude interrupts cricket match for love. Almost gets beaten up by Harbhajan Singh.",
+       "answer": "Mujhse Shaadi Karogi? (2004)",
+       "clueImages": [],
+       "answerImages": [
+        {
+         "src": "assets/image13.webp",
+         "w": 259,
+         "h": 194,
+         "file": "image13.webp",
+         "source": "Mujhse Shaadi Karogi #PictureMeinBhiAaGayeThhey",
+         "deckMedia": "image13.jpeg"
+        },
+        {
+         "src": "assets/image14.webp",
+         "w": 1110,
+         "h": 1600,
+         "file": "image14.webp",
+         "source": "Mujhse Shaadi Karogi (2004) - IMDb",
+         "deckMedia": "image14.jpeg"
+        },
+        {
+         "src": "assets/image12.webp",
+         "w": 250,
+         "h": 334,
+         "file": "image12.webp",
+         "source": "Mujhse Shaadi Karogi - Wikipedia",
+         "deckMedia": "image12.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 16,
+        "answer": 17
+       },
+       "id": "r1-0-150"
+      }
+     ]
+    },
+    {
+     "name": "Pehchan Kaun?",
+     "tagline": "Guess the Actor",
+     "color": "#0F6F75",
+     "clues": [
+      {
+       "points": 10,
+       "label": "IDENTIFY",
+       "prompt": null,
+       "answer": "Shah Rukh Khan",
+       "clueImages": [
+        {
+         "src": "assets/image15-c1.webp",
+         "w": 467,
+         "h": 447,
+         "file": "image15-c1.webp",
+         "source": "A collage of bollywood celebrities as babies",
+         "deckMedia": "image15.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image15-c1.webp",
+         "w": 467,
+         "h": 447,
+         "file": "image15-c1.webp",
+         "source": "A collage of bollywood celebrities as babies",
+         "deckMedia": "image15.jpeg (cropped)"
+        },
+        {
+         "src": "assets/image16.webp",
+         "w": 800,
+         "h": 1421,
+         "file": "image16.webp",
+         "source": "Shahrukh Khan, srk smile, srk, smile, HD phone wallpaper | Peakpx",
+         "deckMedia": "image16.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 18,
+        "answer": 19
+       },
+       "id": "r1-1-10"
+      },
+      {
+       "points": 20,
+       "label": "IDENTIFY",
+       "prompt": null,
+       "answer": "Salman Khan",
+       "clueImages": [
+        {
+         "src": "assets/image15-c2.webp",
+         "w": 448,
+         "h": 457,
+         "file": "image15-c2.webp",
+         "source": "A collage of bollywood celebrities as babies",
+         "deckMedia": "image15.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image15-c2.webp",
+         "w": 448,
+         "h": 457,
+         "file": "image15-c2.webp",
+         "source": "A collage of bollywood celebrities as babies",
+         "deckMedia": "image15.jpeg (cropped)"
+        },
+        {
+         "src": "assets/image17.webp",
+         "w": 868,
+         "h": 490,
+         "file": "image17.webp",
+         "source": "Haṭo! jaraa Salman Bhai ko bhii dekhane do..\" : r/bollywoodcirclejerk",
+         "deckMedia": "image17.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 20,
+        "answer": 21
+       },
+       "id": "r1-1-20"
+      },
+      {
+       "points": 40,
+       "label": "IDENTIFY",
+       "prompt": null,
+       "answer": "Arbaaz Khan",
+       "clueImages": [
+        {
+         "src": "assets/image18-c1.webp",
+         "w": 219,
+         "h": 279,
+         "file": "image18-c1.webp",
+         "source": "Bollywood Celebrities Childhood Pictures",
+         "deckMedia": "image18.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image20.webp",
+         "w": 806,
+         "h": 605,
+         "file": "image20.webp",
+         "source": "Arbaaz Khan Plays The Role Of 'Tennis Legend Federer' In Commercial.  Twitter Can't Keep Calm | Tennis News",
+         "deckMedia": "image20.jpeg"
+        },
+        {
+         "src": "assets/image19.webp",
+         "w": 1600,
+         "h": 1111,
+         "file": "image19.webp",
+         "source": "Roger Federer | Biography, Championships, & Facts | Britannica",
+         "deckMedia": "image19.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 22,
+        "answer": 23
+       },
+       "id": "r1-1-40"
+      },
+      {
+       "points": 60,
+       "label": "NAME THE PAIR & MOST RECENT MOVIE OF THEIRS",
+       "prompt": null,
+       "answer": "Ranveer Singh & Alia Bhatt\n\nBonus: Rocky aur Rani ki \nPrem Kahani (2023)",
+       "clueImages": [
+        {
+         "src": "assets/image15-c3.webp",
+         "w": 467,
+         "h": 460,
+         "file": "image15-c3.webp",
+         "source": "A collage of bollywood celebrities as babies",
+         "deckMedia": "image15.jpeg (cropped)"
+        },
+        {
+         "src": "assets/image15-c4.webp",
+         "w": 465,
+         "h": 462,
+         "file": "image15-c4.webp",
+         "source": "A collage of bollywood celebrities as babies",
+         "deckMedia": "image15.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image21.webp",
+         "w": 274,
+         "h": 365,
+         "file": "image21.webp",
+         "source": "Rocky Aur Rani Kii Prem Kahaani - Wikipedia",
+         "deckMedia": "image21.jpeg"
+        },
+        {
+         "src": "assets/image15-c3.webp",
+         "w": 467,
+         "h": 460,
+         "file": "image15-c3.webp",
+         "source": "A collage of bollywood celebrities as babies",
+         "deckMedia": "image15.jpeg (cropped)"
+        },
+        {
+         "src": "assets/image15-c4.webp",
+         "w": 465,
+         "h": 462,
+         "file": "image15-c4.webp",
+         "source": "A collage of bollywood celebrities as babies",
+         "deckMedia": "image15.jpeg (cropped)"
+        }
+       ],
+       "slides": {
+        "clue": 24,
+        "answer": 25
+       },
+       "id": "r1-1-60"
+      },
+      {
+       "points": 100,
+       "label": null,
+       "prompt": null,
+       "answer": "(1) Prithviraaj Kapoor, (2) Shammi Kapoor, (3) Shashi Kapoor, (4) Randhir Kapoor, (5) Zahaan Kapoor, (6) Shweta Nanda",
+       "clueImages": [
+        {
+         "src": "assets/image22.webp",
+         "w": 523,
+         "h": 540,
+         "file": "image22.webp",
+         "source": "No photo description available.",
+         "deckMedia": "image22.jpeg"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image23.webp",
+         "w": 328,
+         "h": 154,
+         "file": "image23.webp",
+         "source": "Wtf Raj Kapoor : r/BollyBlindsNGossip",
+         "deckMedia": "image23.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 26,
+        "answer": 27
+       },
+       "overlays": [
+        {
+         "text": "2",
+         "x": 54.7,
+         "y": 21.16,
+         "w": 7.81,
+         "h": 13.04
+        },
+        {
+         "text": "3",
+         "x": 83.65,
+         "y": 21.16,
+         "w": 7.81,
+         "h": 13.04
+        },
+        {
+         "text": "4",
+         "x": 0.0,
+         "y": 36.4,
+         "w": 7.81,
+         "h": 13.04
+        },
+        {
+         "text": "1",
+         "x": 52.97,
+         "y": 6.59,
+         "w": 21.42,
+         "h": 13.04
+        },
+        {
+         "text": "5",
+         "x": 69.18,
+         "y": 65.04,
+         "w": 8.39,
+         "h": 14.58
+        },
+        {
+         "text": "6*",
+         "x": 26.77,
+         "y": 52.0,
+         "w": 8.39,
+         "h": 10.02
+        }
+       ],
+       "id": "r1-1-100"
+      },
+      {
+       "points": 150,
+       "label": "ID THE ACTOR",
+       "prompt": "This versatile Indian actor is known for memorable supporting roles in 25+ films. He debuted in 2011 thriller No One Killed Jessica, earning a Filmfare Best Male Debut nomination. He has since appeared in MBKD, Raanjhanaa, Shahid, Raees, Article 15, and Mission Mangal. He is also a frequent collaborator of director Aanand L. Rai.",
+       "answer": "Mohd. Zeeshan Ayub",
+       "clueImages": [],
+       "answerImages": [
+        {
+         "src": "assets/image25-c1.webp",
+         "w": 978,
+         "h": 804,
+         "file": "image25-c1.webp",
+         "source": "They both kinda look same to me : r/indiasocial",
+         "deckMedia": "image25.png (cropped)"
+        },
+        {
+         "src": "assets/image24.webp",
+         "w": 1000,
+         "h": 1333,
+         "file": "image24.webp",
+         "source": "Mohd. Zeeshan Ayyub - IMDb",
+         "deckMedia": "image24.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 28,
+        "answer": 29
+       },
+       "id": "r1-1-150"
+      }
+     ]
+    },
+    {
+     "name": "Minimal Masala",
+     "tagline": "Poster clues",
+     "color": "#E95F5C",
+     "clues": [
+      {
+       "points": 10,
+       "label": null,
+       "prompt": null,
+       "answer": "Lagaan (2000)",
+       "clueImages": [
+        {
+         "src": "assets/image26-c1.webp",
+         "w": 501,
+         "h": 646,
+         "file": "image26-c1.webp",
+         "source": "Some more Minimalist posters from multiple sources - Aamir Khan Edition : r/ bollywood",
+         "deckMedia": "image26.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 30,
+        "answer": 31
+       },
+       "id": "r1-2-10"
+      },
+      {
+       "points": 20,
+       "label": null,
+       "prompt": null,
+       "answer": "Dilwale Dulhaniya Le Jayenge",
+       "clueImages": [
+        {
+         "src": "assets/image27-c1.webp",
+         "w": 600,
+         "h": 779,
+         "file": "image27-c1.webp",
+         "source": "DDLJ Minimalist Posters from multiple sources to celebrate its 27th  Anniversary : r/bollywood",
+         "deckMedia": "image27.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image28.webp",
+         "w": 667,
+         "h": 1000,
+         "file": "image28.webp",
+         "source": "Amazon.com: Dilwale Dulhania Le Jayenge Hindi Bollywood Indian Old Film  Movie Poster Tin Wall Sign Retro Iron Painting Vintage Metal Plaque  Decoration Hanging Artwork Poster for Bar Cafe Store Home Yard…: Posters",
+         "deckMedia": "image28.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 32,
+        "answer": 33
+       },
+       "id": "r1-2-20"
+      },
+      {
+       "points": 40,
+       "label": null,
+       "prompt": null,
+       "answer": "Manjhi: the Mountain Man",
+       "clueImages": [
+        {
+         "src": "assets/image29-c1.webp",
+         "w": 454,
+         "h": 576,
+         "file": "image29-c1.webp",
+         "deckMedia": "image29.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image30.webp",
+         "w": 1000,
+         "h": 1445,
+         "file": "image30.webp",
+         "source": "Manjhi: The Mountain Man (2015) - IMDb",
+         "deckMedia": "image30.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 34,
+        "answer": 35
+       },
+       "id": "r1-2-40"
+      },
+      {
+       "points": 60,
+       "label": null,
+       "prompt": null,
+       "answer": "Rang de Basanti",
+       "clueImages": [
+        {
+         "src": "assets/image31-c1.webp",
+         "w": 480,
+         "h": 572,
+         "file": "image31-c1.webp",
+         "source": "Rang De Basanti Minimalist Poster",
+         "deckMedia": "image31.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image32.webp",
+         "w": 414,
+         "h": 592,
+         "file": "image32.webp",
+         "source": "Rang De Basanti (2006) - IMDb",
+         "deckMedia": "image32.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 36,
+        "answer": 37
+       },
+       "id": "r1-2-60"
+      },
+      {
+       "points": 100,
+       "label": null,
+       "prompt": null,
+       "answer": "Deewar",
+       "clueImages": [
+        {
+         "src": "assets/image33-c1.webp",
+         "w": 640,
+         "h": 823,
+         "file": "image33-c1.webp",
+         "source": "A Minimalist Movie Art Project: Bollywood Edition | ThatGuyNoman | Blog",
+         "deckMedia": "image33.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image34.webp",
+         "w": 666,
+         "h": 1000,
+         "file": "image34.webp",
+         "source": "Amazon.com: 1art1 Bollywood, Deewar Poster (36x24 inches) and 1x 1art1  Collection Poster: Posters & Prints",
+         "deckMedia": "image34.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 38,
+        "answer": 39
+       },
+       "id": "r1-2-100"
+      },
+      {
+       "points": 150,
+       "label": null,
+       "prompt": null,
+       "answer": "Anand",
+       "clueImages": [
+        {
+         "src": "assets/image35-c1.webp",
+         "w": 500,
+         "h": 576,
+         "file": "image35-c1.webp",
+         "source": "r/ClassicDesiCelebs - Some of my Favorite Minimal Posters of Classic Bollywood Movies",
+         "deckMedia": "image35.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image36.webp",
+         "w": 495,
+         "h": 619,
+         "file": "image36.webp",
+         "source": "Anand broke me in the most beautiful way. What do you think about this movie?  : r/ThirtiesIndia",
+         "deckMedia": "image36.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 40,
+        "answer": 41
+       },
+       "id": "r1-2-150"
+      }
+     ]
+    },
+    {
+     "name": "Filmi Fauna",
+     "tagline": "Animals in movies",
+     "color": "#D94F70",
+     "clues": [
+      {
+       "points": 10,
+       "label": "QUESTION: GUESS THE NAME OF THE MOVIE (ANIMAL FOR BONUS x2)",
+       "prompt": null,
+       "answer": "Hum Aapke Hain Koun (Tuffy)",
+       "clueImages": [
+        {
+         "src": "assets/image37.webp",
+         "w": 1280,
+         "h": 720,
+         "file": "image37.webp",
+         "source": "Bollywood's most unforgettable animal characters who stole the show",
+         "deckMedia": "image37.jpeg"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 42,
+        "answer": 43
+       },
+       "id": "r1-3-10"
+      },
+      {
+       "points": 20,
+       "label": "QUESTION: GUESS THE NAME OF THE MOVIE (ANIMAL FOR BONUS x2)",
+       "prompt": null,
+       "answer": "Dil Dhadakne Do (Pluto Mehra)",
+       "clueImages": [
+        {
+         "src": "assets/image38.webp",
+         "w": 500,
+         "h": 309,
+         "file": "image38.webp",
+         "source": "Aamir Khan's Cameo In 'Dil Dhadakne Do' Is A Voice-Over For A Pet  Bullmastiff | HuffPost News",
+         "deckMedia": "image38.jpeg"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 44,
+        "answer": 45
+       },
+       "id": "r1-3-20"
+      },
+      {
+       "points": 40,
+       "label": "QUESTION: GUESS THE NAME OF THE MOVIE (ANIMAL FOR BONUS x2)",
+       "prompt": null,
+       "answer": "Mai Prem ki Deewani Hoon (Raja tota)",
+       "clueImages": [
+        {
+         "src": "assets/image39.webp",
+         "w": 900,
+         "h": 432,
+         "file": "image39.webp",
+         "source": "Watching Main Prem Ki Diwani Hoon As An Adult",
+         "deckMedia": "image39.jpeg"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 46,
+        "answer": 47
+       },
+       "id": "r1-3-40"
+      },
+      {
+       "points": 60,
+       "label": "QUESTION: GUESS THE NAME OF THE MOVIE (ANIMAL FOR BONUS x2)",
+       "prompt": null,
+       "answer": "Haathi Mere Sathi (Raju)",
+       "clueImages": [
+        {
+         "src": "assets/image40.webp",
+         "w": 1080,
+         "h": 608,
+         "file": "image40.webp",
+         "source": "Prime Video: Haathi Mere Saathi",
+         "deckMedia": "image40.jpeg"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 48,
+        "answer": 49
+       },
+       "id": "r1-3-60"
+      },
+      {
+       "points": 100,
+       "label": "QUESTION: GUESS THE NAME OF THE MOVIE (ANIMAL FOR BONUS x2)",
+       "prompt": null,
+       "answer": "Coolie (Allah Rakha)",
+       "clueImages": [
+        {
+         "src": "assets/image41-c1.webp",
+         "w": 446,
+         "h": 273,
+         "file": "image41-c1.webp",
+         "source": "Coolie (1983) | MemsaabStory",
+         "deckMedia": "image41.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 50,
+        "answer": 51
+       },
+       "id": "r1-3-100"
+      },
+      {
+       "points": 150,
+       "label": "QUESTION: GUESS THE NAME OF THE MOVIE (ANIMAL FOR BONUS x2)",
+       "prompt": null,
+       "answer": "Maine Pyaar Kiya (Handsome)",
+       "clueImages": [
+        {
+         "src": "assets/image42-c1.webp",
+         "w": 1200,
+         "h": 628,
+         "file": "image42-c1.webp",
+         "source": "Kabootar Ja Ja Ja, FR! #TwitterX",
+         "deckMedia": "image42.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 52,
+        "answer": 53
+       },
+       "id": "r1-3-150"
+      }
+     ]
+    },
+    {
+     "name": "Jodi No. 1",
+     "tagline": "Bollywood Duos",
+     "color": "#1C2632",
+     "clues": [
+      {
+       "points": 10,
+       "label": "NAME THE DUO",
+       "prompt": "When not shooting for surf excel advertisements, this duo makes blockbuster thriller movies such as Baazigar, Aitraaz, Ajnabee, Race etc.",
+       "answer": "Abbas Mustan",
+       "clueImages": [
+        {
+         "src": "assets/image43.webp",
+         "w": 620,
+         "h": 415,
+         "file": "image43.webp",
+         "source": "All About MACHINE! Abbas-Mustan In A Candid Interview With Koimoi",
+         "deckMedia": "image43.jpeg"
+        },
+        {
+         "src": "assets/image44-c1.webp",
+         "w": 191,
+         "h": 189,
+         "file": "image44-c1.webp",
+         "source": "RVCJ - Abbas-Mustan! | Facebook",
+         "deckMedia": "image44.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 54,
+        "answer": 55
+       },
+       "id": "r1-4-10"
+      },
+      {
+       "points": 20,
+       "label": "QUESTION",
+       "prompt": "Which actor-director pair gave us the legendary Devdas and Hum Dil De Chuke Sanam? ",
+       "answer": "Sanjay Leela Bhansali & Aishwarya Rai",
+       "clueImages": [],
+       "answerImages": [
+        {
+         "src": "assets/image45.webp",
+         "w": 1280,
+         "h": 720,
+         "file": "image45.webp",
+         "source": "When Salman Khan admitted to creating a dramatic scene outside Aishwarya  Rai's residence: 'If you don't fight, there's no love' | Hindi Movie News -  The Times of India",
+         "deckMedia": "image45.jpeg"
+        },
+        {
+         "src": "assets/image46.webp",
+         "w": 616,
+         "h": 462,
+         "file": "image46.webp",
+         "source": "All you need to know about the bond shared between Sanjay Leela Bhansali  and Aishwarya Rai Bachchan | Filmfare.com",
+         "deckMedia": "image46.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 56,
+        "answer": 57
+       },
+       "id": "r1-4-20"
+      },
+      {
+       "points": 40,
+       "label": "NAME THE MOVIES",
+       "prompt": "Name the movies in which these KBC hosts have a double role.",
+       "answer": "Satte pe Satta (1982), Duplicate (1998)",
+       "clueImages": [
+        {
+         "src": "assets/image47-c1.webp",
+         "w": 600,
+         "h": 667,
+         "file": "image47-c1.webp",
+         "source": "Why Shah Rukh Khan-hosted KBC 3 didn't work? Creator Siddhartha Basu says  'comparisons with Amitabh Bachchan' to blame | Television News - The Indian  Express",
+         "deckMedia": "image47.jpeg (cropped)"
+        },
+        {
+         "src": "assets/image47-c2.webp",
+         "w": 593,
+         "h": 667,
+         "file": "image47-c2.webp",
+         "source": "Why Shah Rukh Khan-hosted KBC 3 didn't work? Creator Siddhartha Basu says  'comparisons with Amitabh Bachchan' to blame | Television News - The Indian  Express",
+         "deckMedia": "image47.jpeg (cropped)"
+        }
+       ],
+       "answerImages": [
+        {
+         "src": "assets/image48.webp",
+         "w": 970,
+         "h": 730,
+         "file": "image48.webp",
+         "source": "SrBachchan #37YearsOfSattePeSatta Congratulation 37 years on the film Satte  Pe Satta (1982) #AmitabhBachchan @SrBachchan sir in double Role as #Ravi &  #Babu what a movie... Masterpiece performance💪💪",
+         "deckMedia": "image48.jpeg"
+        },
+        {
+         "src": "assets/image49.webp",
+         "w": 266,
+         "h": 374,
+         "file": "image49.webp",
+         "source": "Duplicate (1998 film) - Wikipedia",
+         "deckMedia": "image49.jpeg"
+        }
+       ],
+       "slides": {
+        "clue": 58,
+        "answer": 59
+       },
+       "id": "r1-4-40"
+      },
+      {
+       "points": 60,
+       "label": "NAME THE SHAKESPEARE WORKS THESE MOVIES ARE BASED ON",
+       "prompt": null,
+       "answer": "Haider: Hamlet\nOmkara: Othello\nMaqbool: Macbeth",
+       "clueImages": [
+        {
+         "src": "assets/image50.webp",
+         "w": 1600,
+         "h": 1115,
+         "file": "image50.webp",
+         "source": "Vishal Bhardwaj | Movies, Wife. Singer, Career, Shakespeare, & Facts |  Britannica",
+         "deckMedia": "image50.jpeg"
+        },
+        {
+         "src": "assets/image51.webp",
+         "w": 1600,
+         "h": 1066,
+         "file": "image51.webp",
+         "source": "William Shakespeare | The Poetry Foundation",
+         "deckMedia": "image51.jpeg"
+        },
+        {
+         "src": "assets/image52-c1.webp",
+         "w": 483,
+         "h": 236,
+         "file": "image52-c1.webp",
+         "source": "Happy 58th Birthday to the eight time National Award winning artist Vishal  Bhardwaj. Comment below your favourite film directed by this legend :  r/BollyBlindsNGossip",
+         "deckMedia": "image52.png (cropped)"
+        }
+       ],
+       "answerImages": [],
+       "slides": {
+        "clue": 60,
+        "answer": 61
+       },
+       "id": "r1-4-60"
+      },
+      {
+       "points": 100,
+       "label": "IDENTIFY THE COUPLE & THE MOVIE",
+       "prompt": "This rumored love story became unforgettable because cinema and gossip seemed to look directly at each other. Two actors who had already created huge screen chemistry were cast in a film about a married man, his wife, and the woman he cannot emotionally escape. The casting itself became the real headline, because audiences felt the film was not hiding from the rumors around them — it was almost staging them.",
+       "answer": "Amitabh Bachchan & Rekha (Silsila)",
+       "clueImages": [],
+       "answerImages": [],
+       "slides": {
+        "clue": 62,
+        "answer": 63
+       },
+       "id": "r1-4-100"
+      },
+      {
+       "points": 150,
+       "label": "IDENTIFY THE COUPLE",
+       "prompt": "On a legendary film set, the story was supposed to be about a mother and her sons, but off-screen, another love story quietly began. During a fire sequence, the actress was trapped, and a younger co-star rushed in to save her, getting badly burned himself. What began as gratitude slowly became affection, and soon the man playing her son on-screen became her husband in real life.",
+       "answer": "Nargis and Sunil Dutt (Mother India)",
+       "clueImages": [],
+       "answerImages": [],
+       "slides": {
+        "clue": 64,
+        "answer": 65
+       },
+       "id": "r1-4-150"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "name": "EMOJI MOVIES",
+   "type": "tiles",
+   "kind": "emoji",
+   "introTitle": "GUESS THE MOVIE FROM EMOJIS",
+   "rules": "Twelve movie clues. 50 points each, 600 points total.",
+   "boardPrompt": null,
+   "clues": [
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "🏍️💨👮‍♂️💰🎭",
+     "answer": "Dhoom",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 68,
+      "answer": 69
+     },
+     "id": "r2-1",
+     "number": 1
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "👨‍👩‍👦🧒🏽🏠💔👴👵",
+     "answer": "Bhagban",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 70,
+      "answer": 71
+     },
+     "id": "r2-2",
+     "number": 2
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "👽📻🛕❓",
+     "answer": "PK",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 72,
+      "answer": 73
+     },
+     "id": "r2-3",
+     "number": 3
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "🧑‍🎤🎬🔥♻️👻",
+     "answer": "Om Shanti Om",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 74,
+      "answer": 75
+     },
+     "id": "r2-4",
+     "number": 4
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "👨‍🦯🎹🔪",
+     "answer": "Andhadhun",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 76,
+      "answer": 77
+     },
+     "id": "r2-5",
+     "number": 5
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "👦🏽👧🏽🏀💔🎤",
+     "answer": "Kuch Kuch Hota Hai",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 78,
+      "answer": 79
+     },
+     "id": "r2-6",
+     "number": 6
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "👩‍🏫🧒🎨⭐😭",
+     "answer": "Taare Zameen Par",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 80,
+      "answer": 81
+     },
+     "id": "r2-7",
+     "number": 7
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "👩‍🦳🚕👨‍👧🏠💩",
+     "answer": "Piku",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 82,
+      "answer": 83
+     },
+     "id": "r2-8",
+     "number": 8
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "🏰👸🔥🪞⚔️",
+     "answer": "Padmavat",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 84,
+      "answer": 85
+     },
+     "id": "r2-9",
+     "number": 9
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "💰🏠😂📞2️⃣",
+     "answer": "Phir Hera Pheri",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 86,
+      "answer": 87
+     },
+     "id": "r2-10",
+     "number": 10
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "🪨⭐",
+     "answer": "Rockstar",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 88,
+      "answer": 89
+     },
+     "id": "r2-11",
+     "number": 11
+    },
+    {
+     "points": 50,
+     "label": null,
+     "prompt": "🔥🛣️",
+     "answer": "Agneepath",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 90,
+      "answer": 91
+     },
+     "id": "r2-12",
+     "number": 12
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "SECOND VERSE SONGS",
+   "type": "tiles",
+   "kind": "verse",
+   "introTitle": "GUESS THE SONG FROM THE SECOND VERSE",
+   "rules": "Eight song clues. 75 points each, 600 points total.",
+   "boardPrompt": "Click a numbered tile for a second-verse clue.",
+   "clues": [
+    {
+     "points": 75,
+     "label": "SECOND VERSE",
+     "prompt": "Jaane kab meri neend udi\nSoyi soyi raaton mein\nJaane kab mera haath gaya\nSoneya tere haathon mein\n\nChal padte teri ore\nMain jab bhi kadam uthati hoon\nJaaun tujh se door door\nto paas tere aa jaati hoon\n\nMaine dekha tujhe bhula ke\nHar ek tarqeeb laga ke\nHar nuskhe ko aazmaa ke",
+     "answer": "Hangover (sung by Salman Khan)",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 94,
+      "answer": 95
+     },
+     "id": "r3-1",
+     "number": 1
+    },
+    {
+     "points": 75,
+     "label": "SECOND VERSE",
+     "prompt": "Sath Sath Chalte Chalte\nHath Chhut Jayenge\nAisi Raho Me Milo Naa\nBaate Bate Karte Karte \nRaat Kat Jayegi\nAisi Raaton Me Milo Naa\n\nKya Hum Hai Kya Rab Hai\nJaha Tu Hai Wahi Sab Hai\nTere Labh Mile Mere Labh Khile\nAb Dur Kya Hai Jana",
+     "answer": "Mera Ishq Sufiyana",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 96,
+      "answer": 97
+     },
+     "id": "r3-2",
+     "number": 2
+    },
+    {
+     "points": 75,
+     "label": "SECOND VERSE",
+     "prompt": "Aankhein dekhi to mein dekhtha reh gaya\nJaam do aur donon hi do aatishah\nAankhein ya maikade ki yeh do baab hai\nAankhein inko kahoon ya kahoon khuwaab hai\n\nAankhein neechi hui to haya ban gayi\nAankhein unchi howi to dua ban gayi\nAankhein uth kar jhuki to ada ban gayi\nAankhein jhuk kar uthi to Sazah ban gayi\nAankhein jin mein hai qaid aasman-o-zameen",
+     "answer": "Afreen Afreen",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 98,
+      "answer": 99
+     },
+     "id": "r3-3",
+     "number": 3
+    },
+    {
+     "points": 75,
+     "label": "SECOND VERSE",
+     "prompt": "ho tujhse milna puraanii dillii me\nchhoR aa'ii nishaanii dillii me\nBallimaran se daribe tallak\nterii merii kahaanii dilli me",
+     "answer": "Kajra Re",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 100,
+      "answer": 101
+     },
+     "id": "r3-4",
+     "number": 4
+    },
+    {
+     "points": 75,
+     "label": "SECOND VERSE",
+     "prompt": "Jab unki taraf dekhun\nBaate haule haule karte hai\nHai magar, be-asar, mujh par har paintra\n\nHaaye re aise tarse humko\nHo gaye sau arse re,\nSookhey dil pe megha ban ke\nTeri nazariya barse re",
+     "answer": "Shiela ki Jawani",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 102,
+      "answer": 103
+     },
+     "id": "r3-5",
+     "number": 5
+    },
+    {
+     "points": 75,
+     "label": "SECOND VERSE",
+     "prompt": "Hum miT chale jinke liye\nBin kuch kahe woh chhup chhup rahe\nKoi zaraa yeh unse kahe\nNa aise aazmaao\n",
+     "answer": "Khoya Khoya Chand",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 104,
+      "answer": 105
+     },
+     "id": "r3-6",
+     "number": 6
+    },
+    {
+     "points": 75,
+     "label": "SECOND VERSE",
+     "prompt": "Shaam Ko Milun Jo Main Tujhe,\nToh Bura Subha Na Jaane\nKyun Kuch Maan Jaati hai Yeh,\nHar Lamha Har Ghari Har Pehar,\nHi Teri Yaadon Se Tadpa Ke.\nMujhko Jalati Hai Yeh.",
+     "answer": "Pee Loon (Once upon a time in Mumbai)",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 106,
+      "answer": 107
+     },
+     "id": "r3-7",
+     "number": 7
+    },
+    {
+     "points": 75,
+     "label": "SECOND VERSE",
+     "prompt": "Lamha lamha aarmano ki pharmahis thi\nLamha lamha zurrat ki aazmahis thi\nApne karam gir gir ke mujphe barsa tha\nApne karam barsatho tab mein tarsaa tha\nPhir suna huwa, manzar mera\nWoh mera sanam, dilbar mera\ndil todh gaya mujhe chood gaya",
+     "answer": "Dard-e-disco",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 108,
+      "answer": 109
+     },
+     "id": "r3-8",
+     "number": 8
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "CHARADES TIMER",
+   "type": "timer",
+   "introTitle": null,
+   "rules": "Give one physical card to the acting player. Start the timer and count how many titles their team guesses in 30 seconds.\n\nReuse the timer for each team.",
+   "seconds": 30,
+   "unitLabel": "seconds remaining",
+   "endText": "TIME!",
+   "slides": {
+    "start": 111,
+    "countdown": [
+     111,
+     140
+    ],
+    "end": 141
+   }
+  },
+  {
+   "id": 5,
+   "name": "QUIZ QUESTIONS",
+   "type": "tiles",
+   "kind": "quiz",
+   "introTitle": "PROPER QUIZ QUESTIONS",
+   "rules": "Eight quiz questions. 100 points each, 800 points total.",
+   "boardPrompt": null,
+   "clues": [
+    {
+     "points": 100,
+     "label": "ID THE MOVIE AND THE LEGAL REFERENCE",
+     "prompt": "In a 2013 Indian Hindi-language thriller, a game with life-altering consequences is central to the plot. Directed by Aditya Datt and produced by Eros International, this film stars Paresh Rawal, Rajeev Khandelwal, and Tina Desai. The storyline delves into the severe implications of ragging, a pressing social issue. Interestingly, the film’s title holds a significant legal reference as well.",
+     "answer": "Table No. 21 (Ragging is against Article 21 of the Indian Constitution)",
+     "clueImages": [],
+     "answerImages": [],
+     "slides": {
+      "clue": 144,
+      "answer": 145
+     },
+     "id": "r5-1",
+     "number": 1
+    },
+    {
+     "points": 100,
+     "label": "IDENTIFY",
+     "prompt": "Ernst Stavro Blofeld is a fictional supervillain in the James Bond series. A criminal mastermind with aspirations of world domination, he is the archenemy of James Bond. \n\nWhich 1980 character from Bollywood is inspired from this character?\nSteep Holm is an English island lying in the Bristol Channel. How is the island connected to part 1 of this question?",
+     "answer": "Shakal from Shaan (Island is the inspiration for Shakal’s island in Shaan)",
+     "clueImages": [
+      {
+       "src": "assets/image53.webp",
+       "w": 330,
+       "h": 234,
+       "file": "image53.webp",
+       "source": "Steep Holm - Wikipedia",
+       "deckMedia": "image53.png"
+      }
+     ],
+     "answerImages": [
+      {
+       "src": "assets/image54.webp",
+       "w": 276,
+       "h": 400,
+       "file": "image54.webp",
+       "source": "Blofeld and Beyond: The 'big reveal' in the fifth Bond movie – The James  Bond International Fan Club",
+       "deckMedia": "image54.jpeg"
+      },
+      {
+       "src": "assets/image55.webp",
+       "w": 220,
+       "h": 303,
+       "file": "image55.webp",
+       "deckMedia": "image55.png"
+      },
+      {
+       "src": "assets/image56.webp",
+       "w": 1280,
+       "h": 720,
+       "file": "image56.webp",
+       "deckMedia": "image56.png"
+      }
+     ],
+     "slides": {
+      "clue": 146,
+      "answer": 147
+     },
+     "id": "r5-2",
+     "number": 2
+    },
+    {
+     "points": 100,
+     "label": "IDENTIFY THE MOVIE",
+     "prompt": "X is a 2023 road adventure drama film written and directed by Tarun Dudeja.\nIn the movie four women set out for a road trip to the highest motorable pass in the world on a journey of self-discovery.\nThe name of the film shares its name with the nickname given to an actor after her performance in a song from a 1992 film.\nID X and the actor?",
+     "answer": "Dhak Dhak (Madhuri Dixit)",
+     "clueImages": [
+      {
+       "src": "assets/image57.webp",
+       "w": 720,
+       "h": 450,
+       "file": "image57.webp",
+       "source": "Dhak Dhak Movie Review: DHAK DHAK is a well-intentioned genuine effort  laced with some fine performances.",
+       "deckMedia": "image57.jpeg"
+      }
+     ],
+     "answerImages": [
+      {
+       "src": "assets/image59.webp",
+       "w": 1000,
+       "h": 1250,
+       "file": "image59.webp",
+       "deckMedia": "image59.png"
+      },
+      {
+       "src": "assets/image58.webp",
+       "w": 1600,
+       "h": 900,
+       "file": "image58.webp",
+       "source": "16 times Madhuri Dixit-Nene proved she's Bollywood's best dancer | Vogue  India",
+       "deckMedia": "image58.jpeg"
+      }
+     ],
+     "slides": {
+      "clue": 148,
+      "answer": 149
+     },
+     "id": "r5-3",
+     "number": 3
+    },
+    {
+     "points": 100,
+     "label": "ID X",
+     "prompt": "The director revealed that during the production there was a scene requiring a ________ for an auction. The production team brought several ________s, but he felt they were “too good“ since X wasn't supposed to be a skilled artist. Inspired by his time spent with M.F. Husain during the making of a 2000 movie, the director decided to create the ______ himself leading to the memorable result seen in the film.\nIt has since become a cultural reference point and even made a cameo in the trailer for Bhool Bhulaiyaa 3 showcasing its enduring popularity.\nWho is the artist behind this cult phenomenon/ ID X?",
+     "answer": "Majnu Bhai (the painting)",
+     "clueImages": [],
+     "answerImages": [
+      {
+       "src": "assets/image61-c1.webp",
+       "w": 608,
+       "h": 429,
+       "file": "image61-c1.webp",
+       "deckMedia": "image61.png (cropped)"
+      },
+      {
+       "src": "assets/image60.webp",
+       "w": 640,
+       "h": 359,
+       "file": "image60.webp",
+       "source": "Today I realised that in Welcome, Majnu Bhai painted this masterpiece after  his tussle with Vijay Raaz when he said, 'Ghoda bhi soch raha hoga ki kis  gadhe ko bitha diya hai",
+       "deckMedia": "image60.jpeg"
+      }
+     ],
+     "slides": {
+      "clue": 150,
+      "answer": 151
+     },
+     "id": "r5-4",
+     "number": 4
+    },
+    {
+     "points": 100,
+     "label": "WHICH SLOGAN IS THIS? WHICH SOFT DRINK?",
+     "prompt": "This soft drink brand had plenty of memorable advertising campaigns in India, ever since its entry into the market in the late 1980s.\nHowever probably the best of them lies in the memory of a martyred braveheart, who made the ad slogan his own during the 1999 Kargil War, keeping it alive in public memory, long after the brand had moved to using other jingles. \nIt also inspired the title of a 2004 Anant Mahadevan film.",
+     "answer": "Yeh Dil Maange More (Pepsi)",
+     "clueImages": [
+      {
+       "src": "assets/image62-c1.webp",
+       "w": 263,
+       "h": 292,
+       "file": "image62-c1.webp",
+       "source": "Dil Maange More - Wikipedia",
+       "deckMedia": "image62.jpeg (cropped)"
+      }
+     ],
+     "answerImages": [
+      {
+       "src": "assets/image63.webp",
+       "w": 1080,
+       "h": 1081,
+       "file": "image63.webp",
+       "source": "Pepsi® Unveils 'yeh Dil Maange More' Campaign, Paying Tribute To The  Unwavering Spirit Of Youth Constantly Striving For More",
+       "deckMedia": "image63.png"
+      },
+      {
+       "src": "assets/image64.webp",
+       "w": 225,
+       "h": 225,
+       "file": "image64.webp",
+       "source": "Yeh Dil Maange More” — these iconic words embodied the fearless spirit of  Captain Vikram Batra, one of India's greatest war heroes. On July 7, 1999,  during the Kargil War, he led",
+       "deckMedia": "image64.jpeg"
+      },
+      {
+       "src": "assets/image62.webp",
+       "w": 263,
+       "h": 380,
+       "file": "image62.webp",
+       "source": "Dil Maange More - Wikipedia",
+       "deckMedia": "image62.jpeg"
+      }
+     ],
+     "slides": {
+      "clue": 152,
+      "answer": 153
+     },
+     "id": "r5-5",
+     "number": 5
+    },
+    {
+     "points": 100,
+     "label": "NAME THE VOCALIST AND THE FILM",
+     "prompt": "A great classical vocalist did not want to sing for films. So when a legendary filmmaker insisted, the vocalist quoted an absurdly high fee (₹25,000 per song for the 1960 when Lata or Rafi charged around ₹300 or ₹400), probably thinking, “Now they will leave me alone.”\nUnfortunately for him, the filmmaker was making the cinematic equivalent of a Mughal monument and simply said yes.\nThe result: the vocalist sang only two film songs in his playback career, both for the same historical epic.",
+     "answer": "Bade Ghulam Ali Sahab (Mughal-e-Azam)",
+     "clueImages": [],
+     "answerImages": [
+      {
+       "src": "assets/image66.webp",
+       "w": 1000,
+       "h": 1490,
+       "file": "image66.webp",
+       "source": "Mughal-E-Azam (1960) - IMDb",
+       "deckMedia": "image66.jpeg"
+      },
+      {
+       "src": "assets/image65.webp",
+       "w": 640,
+       "h": 640,
+       "file": "image65.webp",
+       "source": "Bade Ghulam Ali Khan | Spotify",
+       "deckMedia": "image65.jpeg"
+      }
+     ],
+     "slides": {
+      "clue": 154,
+      "answer": 155
+     },
+     "id": "r5-6",
+     "number": 6
+    },
+    {
+     "points": 100,
+     "label": "CONNECT THESE ACTORS",
+     "prompt": null,
+     "answer": "Played Bhagat Singh",
+     "clueImages": [
+      {
+       "src": "assets/image67.webp",
+       "w": 1600,
+       "h": 468,
+       "file": "image67.webp",
+       "deckMedia": "image67.png"
+      },
+      {
+       "src": "assets/image68-c1.webp",
+       "w": 234,
+       "h": 263,
+       "file": "image68-c1.webp",
+       "source": "This Bobby Deol film made many superstars insecure, beat Shah Rukh Khan,  Salman Khan, movie name",
+       "deckMedia": "image68.jpeg (cropped)"
+      }
+     ],
+     "answerImages": [
+      {
+       "src": "assets/image69.webp",
+       "w": 1367,
+       "h": 712,
+       "file": "image69.webp",
+       "deckMedia": "image69.png"
+      }
+     ],
+     "slides": {
+      "clue": 156,
+      "answer": 157
+     },
+     "id": "r5-7",
+     "number": 7
+    },
+    {
+     "points": 100,
+     "label": "CONNECT",
+     "prompt": null,
+     "answer": null,
+     "clueImages": [
+      {
+       "src": "assets/image70.webp",
+       "w": 1600,
+       "h": 373,
+       "file": "image70.webp",
+       "deckMedia": "image70.png"
+      }
+     ],
+     "answerImages": [
+      {
+       "src": "assets/image71.webp",
+       "w": 1066,
+       "h": 661,
+       "file": "image71.webp",
+       "deckMedia": "image71.png"
+      }
+     ],
+     "slides": {
+      "clue": 158,
+      "answer": 159
+     },
+     "id": "r5-8",
+     "number": 8
+    }
+   ]
+  }
+ ],
+ "end": {
+  "kicker": "END",
+  "title": "WINNER!",
+  "text": "Thank You!"
+ }
+}
