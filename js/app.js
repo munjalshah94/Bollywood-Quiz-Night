@@ -52,17 +52,25 @@
     setTimeout(function () { t.remove(); }, 2600);
   }
 
-  function confirmDialog(title, text, okLabel) {
+  /* Yes/No style dialog. opts: ok (label), cancel (label), okClass (button colour), focusOk (focus the OK button, not Cancel). */
+  function confirmDialog(title, text, okLabel, opts) {
+    opts = opts || {};
+    var ok = document.getElementById('dlg-ok'), cancel = document.getElementById('dlg-cancel');
     document.getElementById('dlg-title').textContent = title;
     document.getElementById('dlg-text').textContent = text;
-    document.getElementById('dlg-ok').textContent = okLabel || 'OK';
+    ok.textContent = okLabel || 'OK';
+    ok.className = 'btn ' + (opts.okClass || 'btn-danger');
+    cancel.textContent = opts.cancel || 'Cancel';
     return new Promise(function (resolve) {
       $dlg.addEventListener('close', function onClose() {
         $dlg.removeEventListener('close', onClose);
         resolve($dlg.returnValue === 'ok');
       });
       $dlg.returnValue = 'cancel';
-      if ($dlg.showModal) $dlg.showModal(); else resolve(window.confirm(text));
+      if ($dlg.showModal) {
+        $dlg.showModal();
+        if (opts.focusOk) ok.focus();
+      } else resolve(window.confirm(text));
     });
   }
 
@@ -171,8 +179,18 @@
     var gross = info.clue.points + 10 * (run ? run.passes : 0);
     return Math.max(0, gross - hintsUsed(info) * hintCost(info.clue));
   }
+  /* Button or H: ask "Are you sure?" first. Only Yes shows the hint; No (or Esc) leaves it hidden. */
+  var hintAsking = false;
   function revealHint() {
-    if (hintUI && parseHash().name === 'clue') hintUI.reveal();
+    var ui = hintUI;
+    if (!ui || parseHash().name !== 'clue' || hintAsking || $dlg.open) return;
+    var question = ui.question();
+    if (!question) return;   // no more hints
+    hintAsking = true;
+    confirmDialog('Are you sure?', question, 'Yes', { cancel: 'No', okClass: 'btn-teal', focusOk: true }).then(function (yes) {
+      hintAsking = false;
+      if (yes && hintUI === ui && parseHash().name === 'clue') ui.reveal();
+    });
   }
 
   function stepValue() {
@@ -583,6 +601,12 @@
         if (chip && chip.chip) chip.chip.textContent = chipText(info);
       };
       hintUI = {
+        question: function () {
+          var n = hintsUsed(info);
+          if (n >= hints.length) return '';
+          var cost = hintCost(c);
+          return 'Show hint ' + (n + 1) + ' of ' + hints.length + '?' + (cost ? ' It costs ' + cost + ' points if the clue is awarded.' : '');
+        },
         reveal: function () {
           var run = runOf(info);
           if (!run || (run.hints | 0) >= hints.length) return;
@@ -774,6 +798,7 @@
 
   /* ---------------------------------------------------------------- render */
   function render() {
+    if (!quiz || !state) return;   // a hash change can arrive before quiz.json has loaded
     stopTimer();
     hintUI = null;
     var old = document.querySelector('.confetti');
@@ -844,7 +869,7 @@
   // Stop Space on a focused button from also firing a click after we've handled it.
   document.addEventListener('keyup', function (e) {
     if ((e.key === ' ' || e.key === 'Spacebar') && ['clue', 'timer'].indexOf(parseHash().name) >= 0 &&
-      e.target && e.target.tagName === 'BUTTON') e.preventDefault();
+      e.target && e.target.tagName === 'BUTTON' && !$dlg.contains(e.target)) e.preventDefault();
   });
 
   document.getElementById('btn-menu').addEventListener('click', function () { go('#/menu'); });

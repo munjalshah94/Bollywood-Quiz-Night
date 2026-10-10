@@ -22,7 +22,7 @@ https://munjalshah94.github.io/Bollywood-Quiz-Night/
 - **Boards that remember.** Tiles turn grey once played, so nobody repeats a clue. Reveal the answer when you're ready, then head back to the board.
 - **Scoreboard for 2 to 6 teams.** Rename teams, tap plus and minus, or type a score directly. The team whose turn it is stays highlighted.
 - **The pass rule.** Stuck? Pass the clue to the next team. Every pass adds a +10 bonus for whoever answers it.
-- **Hints, if you want them.** Tough picture, emoji and song clues can reveal up to two hints, broad first, narrow second, without giving the answer away. Hints can be free or cost a share of the points.
+- **Hints, only if you ask.** Tough picture, emoji and song clues can reveal up to two hints, broad first, narrow second, without giving the answer away. Hints stay hidden until you press Hint (or `H`) and confirm "Are you sure?". They can be free or cost a share of the points.
 - **A real countdown.** A proper 30-second timer with start, restart, a final beep and a flashing "TIME!".
 - **Keyboard friendly.** Space or Enter reveals, `H` gives a hint, Esc goes back and `M` opens the menu.
 - **Never loses your game.** Scores, team names and played tiles are saved in the browser. Reset anytime, with a confirmation.

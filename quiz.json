@@ -124,7 +124,9 @@
         "answer": 11
        },
        "id": "r1-0-40",
-       "hints": []
+       "hints": [
+        "A 2000s sports drama about a disgraced coach redeeming himself."
+       ]
       },
       {
        "points": 60,
@@ -159,7 +161,9 @@
         "answer": 13
        },
        "id": "r1-0-60",
-       "hints": []
+       "hints": [
+        "A mid-90s family wedding musical: very sweet and very long."
+       ]
       },
       {
        "points": 100,
@@ -190,7 +194,9 @@
         "answer": 15
        },
        "id": "r1-0-100",
-       "hints": []
+       "hints": [
+        "A college-set musical romance from the turn of the millennium."
+       ]
       },
       {
        "points": 150,
@@ -229,7 +235,9 @@
         "answer": 17
        },
        "id": "r1-0-150",
-       "hints": []
+       "hints": [
+        "A 2000s romcom with a three-way love triangle."
+       ]
       }
      ]
     },
@@ -276,7 +284,10 @@
         "answer": 19
        },
        "id": "r1-1-10",
-       "hints": []
+       "hints": [
+        "Rose to superstardom in the 1990s.",
+        "Started out on television before the big screen."
+       ]
       },
       {
        "points": 20,
@@ -316,7 +327,10 @@
         "answer": 21
        },
        "id": "r1-1-20",
-       "hints": []
+       "hints": [
+        "A superstar whose career took off in the late 1980s.",
+        "Hosts a long-running reality show every year."
+       ]
       },
       {
        "points": 40,
@@ -356,7 +370,10 @@
         "answer": 23
        },
        "id": "r1-1-40",
-       "hints": []
+       "hints": [
+        "Began acting in the 1990s, in a famous filmi family.",
+        "Also the producer behind a blockbuster cop-film franchise."
+       ]
       },
       {
        "points": 60,
@@ -412,7 +429,9 @@
         "answer": 25
        },
        "id": "r1-1-60",
-       "hints": []
+       "hints": [
+        "Their latest film is a big-family culture-clash romance."
+       ]
       },
       {
        "points": 100,
@@ -460,7 +479,7 @@
         },
         {
          "text": "4",
-         "x": 0.0,
+         "x": 0,
          "y": 36.4,
          "w": 7.81,
          "h": 13.04
@@ -482,13 +501,16 @@
         {
          "text": "6*",
          "x": 26.77,
-         "y": 52.0,
+         "y": 52,
          "w": 8.39,
          "h": 10.02
         }
        ],
        "id": "r1-1-100",
-       "hints": []
+       "hints": [
+        "Many generations of Bollywood's first family, in one tree.",
+        "Numbers 2 and 3 are sons of number 1."
+       ]
       },
       {
        "points": 150,
@@ -519,7 +541,9 @@
         "answer": 29
        },
        "id": "r1-1-150",
-       "hints": []
+       "hints": [
+        "Trained at India's most famous drama school."
+       ]
       }
      ]
     },
@@ -549,7 +573,10 @@
         "answer": 31
        },
        "id": "r1-2-10",
-       "hints": []
+       "hints": [
+        "A turn-of-the-millennium epic with a sporting twist.",
+        "Oscar-nominated, and the title is a single word."
+       ]
       },
       {
        "points": 20,
@@ -581,7 +608,10 @@
         "answer": 33
        },
        "id": "r1-2-20",
-       "hints": []
+       "hints": [
+        "A mid-90s love story that begins on a trip across Europe.",
+        "Ran in one Mumbai theatre for over twenty years. Four words."
+       ]
       },
       {
        "points": 40,
@@ -612,7 +642,10 @@
         "answer": 35
        },
        "id": "r1-2-40",
-       "hints": []
+       "hints": [
+        "A 2010s biopic about a love that refused to quit.",
+        "A real man who carved a road through a hill with a hammer."
+       ]
       },
       {
        "points": 60,
@@ -644,7 +677,10 @@
         "answer": 37
        },
        "id": "r1-2-60",
-       "hints": []
+       "hints": [
+        "A 2000s drama where carefree college friends turn serious.",
+        "A visiting filmmaker arrives to shoot a documentary."
+       ]
       },
       {
        "points": 100,
@@ -676,7 +712,10 @@
         "answer": 39
        },
        "id": "r1-2-100",
-       "hints": []
+       "hints": [
+        "A 1970s drama of two brothers on opposite sides of the law.",
+        "Written by the duo behind Sholay."
+       ]
       },
       {
        "points": 150,
@@ -708,7 +747,10 @@
         "answer": 41
        },
        "id": "r1-2-150",
-       "hints": []
+       "hints": [
+        "A tender 1970s drama about living life to the fullest.",
+        "A cheerful man with little time left, and his doctor friend."
+       ]
       }
      ]
     },
@@ -738,7 +780,9 @@
         "answer": 43
        },
        "id": "r1-3-10",
-       "hints": []
+       "hints": [
+        "A very clever dog who plays postman between lovers."
+       ]
       },
       {
        "points": 20,
@@ -761,7 +805,9 @@
         "answer": 45
        },
        "id": "r1-3-20",
-       "hints": []
+       "hints": [
+        "A pampered pet dog narrating a rich family's drama."
+       ]
       },
       {
        "points": 40,
@@ -784,7 +830,9 @@
         "answer": 47
        },
        "id": "r1-3-40",
-       "hints": []
+       "hints": [
+        "A chatty feathered friend."
+       ]
       },
       {
        "points": 60,
@@ -807,7 +855,9 @@
         "answer": 49
        },
        "id": "r1-3-60",
-       "hints": []
+       "hints": [
+        "A very large animal with a very big heart."
+       ]
       },
       {
        "points": 100,
@@ -830,7 +880,9 @@
         "answer": 51
        },
        "id": "r1-3-100",
-       "hints": []
+       "hints": [
+        "A sharp-eyed bird of prey."
+       ]
       },
       {
        "points": 150,
@@ -853,7 +905,9 @@
         "answer": 53
        },
        "id": "r1-3-150",
-       "hints": []
+       "hints": [
+        "A feathered messenger carrying notes between sweethearts."
+       ]
       }
      ]
     },
@@ -891,7 +945,10 @@
         "answer": 55
        },
        "id": "r1-4-10",
-       "hints": []
+       "hints": [
+        "Brothers who direct slick, twisty thrillers.",
+        "Their plots love a hero hiding a dark secret."
+       ]
       },
       {
        "points": 20,
@@ -922,7 +979,9 @@
         "answer": 57
        },
        "id": "r1-4-20",
-       "hints": []
+       "hints": [
+        "The director is famous for opulent, larger-than-life sets."
+       ]
       },
       {
        "points": 40,
@@ -970,7 +1029,9 @@
         "answer": 59
        },
        "id": "r1-4-40",
-       "hints": []
+       "hints": [
+        "One is a 1980s brothers-comedy, the other a late-90s gangster caper."
+       ]
       },
       {
        "points": 60,
@@ -1009,7 +1070,9 @@
         "answer": 61
        },
        "id": "r1-4-60",
-       "hints": []
+       "hints": [
+        "Settings: Kashmir, Mumbai's underworld and rural Uttar Pradesh."
+       ]
       },
       {
        "points": 100,
@@ -1023,7 +1086,9 @@
         "answer": 63
        },
        "id": "r1-4-100",
-       "hints": []
+       "hints": [
+        "An early-1980s love triangle with tulip fields in Europe."
+       ]
       },
       {
        "points": 150,
@@ -1037,7 +1102,9 @@
         "answer": 65
        },
        "id": "r1-4-150",
-       "hints": []
+       "hints": [
+        "A 1950s epic; the first of its country nominated for an Oscar."
+       ]
       }
      ]
     }
@@ -1065,7 +1132,10 @@
      },
      "id": "r2-1",
      "number": 1,
-     "hints": []
+     "hints": [
+      "A 2000s action-thriller built on speed and style.",
+      "The title is just one word."
+     ]
     },
     {
      "points": 50,
@@ -1080,7 +1150,10 @@
      },
      "id": "r2-2",
      "number": 2,
-     "hints": []
+     "hints": [
+      "A 2000s family drama that makes everyone call their parents.",
+      "The title is just one word."
+     ]
     },
     {
      "points": 50,
@@ -1095,7 +1168,10 @@
      },
      "id": "r2-3",
      "number": 3,
-     "hints": []
+     "hints": [
+      "A 2010s sci-fi comedy with a very curious visitor.",
+      "The title is a single word."
+     ]
     },
     {
      "points": 50,
@@ -1110,7 +1186,10 @@
      },
      "id": "r2-4",
      "number": 4,
-     "hints": []
+     "hints": [
+      "A 2000s reincarnation drama set in the film industry.",
+      "The title has three words."
+     ]
     },
     {
      "points": 50,
@@ -1125,7 +1204,10 @@
      },
      "id": "r2-5",
      "number": 5,
-     "hints": []
+     "hints": [
+      "A 2010s dark thriller with a very twisty ending.",
+      "The title is just one word."
+     ]
     },
     {
      "points": 50,
@@ -1140,7 +1222,10 @@
      },
      "id": "r2-6",
      "number": 6,
-     "hints": []
+     "hints": [
+      "A 1990s campus romance that ruled hearts.",
+      "The title has four words."
+     ]
     },
     {
      "points": 50,
@@ -1155,7 +1240,10 @@
      },
      "id": "r2-7",
      "number": 7,
-     "hints": []
+     "hints": [
+      "A 2000s drama about a dreamy child and his teacher.",
+      "The title has three words."
+     ]
     },
     {
      "points": 50,
@@ -1170,7 +1258,10 @@
      },
      "id": "r2-8",
      "number": 8,
-     "hints": []
+     "hints": [
+      "A 2010s comedy about a road trip and a fussy father.",
+      "The title is just one word."
+     ]
     },
     {
      "points": 50,
@@ -1185,7 +1276,10 @@
      },
      "id": "r2-9",
      "number": 9,
-     "hints": []
+     "hints": [
+      "A 2010s period epic, lavish and controversial.",
+      "The title is just one word."
+     ]
     },
     {
      "points": 50,
@@ -1200,7 +1294,10 @@
      },
      "id": "r2-10",
      "number": 10,
-     "hints": []
+     "hints": [
+      "A 2000s comedy sequel with the same lovable fools.",
+      "The title has three words."
+     ]
     },
     {
      "points": 50,
@@ -1215,7 +1312,10 @@
      },
      "id": "r2-11",
      "number": 11,
-     "hints": []
+     "hints": [
+      "A 2010s musical drama about heartbreak and fame.",
+      "The title is just one word."
+     ]
     },
     {
      "points": 50,
@@ -1230,7 +1330,10 @@
      },
      "id": "r2-12",
      "number": 12,
-     "hints": []
+     "hints": [
+      "First released in the 1990s, remade in the 2010s.",
+      "The title is just one word."
+     ]
     }
    ]
   },
@@ -1256,7 +1359,10 @@
      },
      "id": "r3-1",
      "number": 1,
-     "hints": []
+     "hints": [
+      "A 2010s dance number from an action comedy.",
+      "The film's lead actor lent his own voice."
+     ]
     },
     {
      "points": 75,
@@ -1271,7 +1377,10 @@
      },
      "id": "r3-2",
      "number": 2,
-     "hints": []
+     "hints": [
+      "A 2010s romantic ballad with a mystical, soulful feel.",
+      "A smooth male voice carries it."
+     ]
     },
     {
      "points": 75,
@@ -1286,7 +1395,10 @@
      },
      "id": "r3-3",
      "number": 3,
-     "hints": []
+     "hints": [
+      "A 1990s classic by a qawwali legend, remade for a 2010s music show.",
+      "His nephew sings it, joined by a young female voice."
+     ]
     },
     {
      "points": 75,
@@ -1301,7 +1413,10 @@
      },
      "id": "r3-4",
      "number": 4,
-     "hints": []
+     "hints": [
+      "A 2000s dance number every wedding plays.",
+      "Led by a sultry female voice."
+     ]
     },
     {
      "points": 75,
@@ -1316,7 +1431,10 @@
      },
      "id": "r3-5",
      "number": 5,
-     "hints": []
+     "hints": [
+      "A 2010s item number with a glamorous leading lady.",
+      "A powerhouse female voice with serious sass."
+     ]
     },
     {
      "points": 75,
@@ -1331,7 +1449,10 @@
      },
      "id": "r3-6",
      "number": 6,
-     "hints": []
+     "hints": [
+      "A dreamy, wistful song best heard late at night.",
+      "Three words in the title, and one repeats."
+     ]
     },
     {
      "points": 75,
@@ -1346,7 +1467,10 @@
      },
      "id": "r3-7",
      "number": 7,
-     "hints": []
+     "hints": [
+      "A 2010s romantic number from a 1970s-set gangster drama.",
+      "A soft, dreamy male voice with a folksy touch."
+     ]
     },
     {
      "points": 75,
@@ -1361,7 +1485,10 @@
      },
      "id": "r3-8",
      "number": 8,
-     "hints": []
+     "hints": [
+      "A 2000s dance number about heartbreak at a party.",
+      "A booming, high-energy male voice leads it."
+     ]
     }
    ]
   },
@@ -1452,7 +1579,9 @@
      },
      "id": "r5-2",
      "number": 2,
-     "hints": []
+     "hints": [
+      "A star-packed 1980 adventure; the villain hides in a rocky sea lair."
+     ]
     },
     {
      "points": 100,
@@ -1523,7 +1652,9 @@
      },
      "id": "r5-4",
      "number": 4,
-     "hints": []
+     "hints": [
+      "A 2000s gangster comedy with a famously bad horse portrait."
+     ]
     },
     {
      "points": 100,
@@ -1604,7 +1735,9 @@
      },
      "id": "r5-6",
      "number": 6,
-     "hints": []
+     "hints": [
+      "He belonged to the Patiala gharana of classical music."
+     ]
     },
     {
      "points": 100,
@@ -1643,7 +1776,10 @@
      },
      "id": "r5-7",
      "number": 7,
-     "hints": []
+     "hints": [
+      "Patriotic biopics spanning the 1960s to the 2000s.",
+      "A young revolutionary remembered for his famous hat."
+     ]
     },
     {
      "points": 100,
@@ -1674,7 +1810,10 @@
      },
      "id": "r5-8",
      "number": 8,
-     "hints": []
+     "hints": [
+      "A sports biopic released in the early 2020s.",
+      "Each plays a member of an underdog team that stunned the world."
+     ]
     }
    ]
   }
