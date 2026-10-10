@@ -18,7 +18,7 @@
   var quiz = null;
   var index = {};      // clue id -> { round, clue, cat, label }
   var state = null;
-  var timer = { mode: 'idle', end: 0, handle: 0, audio: null };
+  var timer = { cd: null, api: null, audio: null };   // cd = the countdown of the screen that is showing
 
   /* ---------------------------------------------------------------- helpers */
   function el(tag, props) {
@@ -83,8 +83,37 @@
     }
     return {
       v: 1, n: prev ? prev.n : 4, teams: teams, used: {}, turn: 0, run: null,
-      step: 'auto', sbOpen: prev ? prev.sbOpen : window.innerWidth >= 760, sound: prev ? prev.sound : true
+      step: 'auto', sbOpen: prev ? prev.sbOpen : window.innerWidth >= 760, sound: prev ? prev.sound : true,
+      charades: freshCharades(prev && prev.charades)
     };
+  }
+
+  /* Charades deck + turn state. Titles are kept by name, so editing the list never breaks a saved game.
+     order = the deck, shuffled once per game; used = guessed; skipped = the back of the deck; cur = the card on screen. */
+  var CH_PHASES = ['idle', 'pick', 'ready', 'play', 'result', 'summary'];
+  function freshCharades(prev) {
+    return { filter: prev && ['all', 'easy', 'mh'].indexOf(prev.filter) >= 0 ? prev.filter : 'all',
+      order: [], used: [], skipped: [], skipShuffled: false, cycle: 1, last: null,
+      phase: 'idle', team: -1, tally: 0, cur: null, expired: false, endAt: 0, left: 0, running: false, turns: {} };
+  }
+  function cleanCharades(c) {
+    var base = freshCharades(c);
+    if (!c || typeof c !== 'object') return base;
+    var strs = function (a) { return Array.isArray(a) ? a.filter(function (x) { return typeof x === 'string'; }) : []; };
+    base.order = strs(c.order); base.used = strs(c.used); base.skipped = strs(c.skipped);
+    base.skipShuffled = !!c.skipShuffled; base.cycle = Math.max(1, c.cycle | 0 || 1);
+    base.last = typeof c.last === 'string' ? c.last : null;
+    base.phase = CH_PHASES.indexOf(c.phase) >= 0 ? c.phase : 'idle';
+    base.team = Number.isInteger(c.team) ? c.team : -1;
+    base.tally = Math.max(0, c.tally | 0); base.cur = typeof c.cur === 'string' ? c.cur : null;
+    base.expired = !!c.expired; base.endAt = Number(c.endAt) || 0; base.left = Math.max(0, Number(c.left) || 0); base.running = !!c.running;
+    if (c.turns && typeof c.turns === 'object') {
+      Object.keys(c.turns).forEach(function (k) {
+        var t = c.turns[k] || {};
+        base.turns[k] = { tally: Math.max(0, t.tally | 0), added: !!t.added, applied: Number(t.applied) || 0 };
+      });
+    }
+    return base;
   }
 
   function loadState() {
@@ -107,6 +136,7 @@
     base.step = ['auto', '1', '10', '50', '100'].indexOf(String(s.step)) >= 0 ? String(s.step) : 'auto';
     base.sbOpen = s.sbOpen !== false;
     base.sound = s.sound !== false;
+    base.charades = cleanCharades(s.charades);
     return base;
   }
 
@@ -269,7 +299,8 @@
   /* ---------------------------------------------------------------- scoreboard */
   function renderScoreboard() {
     var route = parseHash().name;
-    if (route === 'title') { $sb.hidden = true; document.documentElement.style.setProperty('--sb-h', '0px'); return; }
+    var chPhase = route === 'charades' ? state.charades.phase : '';
+    if (route === 'title' || chPhase === 'ready' || chPhase === 'play') { $sb.hidden = true; document.documentElement.style.setProperty('--sb-h', '0px'); return; }
     $sb.hidden = false;
     $sb.className = state.sbOpen ? '' : 'collapsed';
     var answering = answeringIndex();
@@ -499,13 +530,19 @@
         heading ? el('span', { class: 'rules-title', text: heading }) : null,
         document.createTextNode(lines.join('\n')));
     }
-    var start = r.type === 'timer'
-      ? el('button', { type: 'button', class: 'btn btn-lg btn-pink', id: 'btn-startround', onclick: function () { go('#/timer'); } }, 'Start ' + r.seconds + ' sec timer')
-      : el('button', { type: 'button', class: 'btn btn-lg btn-teal', id: 'btn-startround', onclick: function () { go('#/board/' + r.id); } }, 'Start round');
+    var cards = r.type === 'timer' && quiz.charades;
+    var start = cards
+      ? el('button', { type: 'button', class: 'btn btn-lg btn-pink', id: 'btn-startround', onclick: startCharades },
+        state.charades.phase === 'idle' ? 'Start charades' : 'Continue charades')
+      : r.type === 'timer'
+        ? el('button', { type: 'button', class: 'btn btn-lg btn-pink', id: 'btn-startround', onclick: function () { go('#/timer'); } }, 'Start ' + r.seconds + ' sec timer')
+        : el('button', { type: 'button', class: 'btn btn-lg btn-teal', id: 'btn-startround', onclick: function () { go('#/board/' + r.id); } }, 'Start round');
     var node = el('section', { class: 'intro' },
       el('div', { class: 'big-num', text: String(r.id) }),
       el('h2', { text: r.introTitle || r.name }),
       rulesNode,
+      cards ? el('p', { class: 'ch-pp', text: quiz.charades.pointsPerTitle + ' points for every title the team guesses · ' + quiz.charades.secondsPerTurn + ' seconds per turn' }) : null,
+      cards ? charadesIntroControls() : null,
       el('div', { class: 'actions' },
         start,
         el('button', { type: 'button', class: 'btn btn-ghost btn-lg', onclick: function () { go('#/menu'); } }, 'Menu')));
@@ -716,10 +753,45 @@
   }
 
   /* ---------------------------------------------------------------- timer */
+  /* One real countdown, shared by the quick timer and every charades turn (never one screen per second).
+     It runs off a wall-clock end time, not a count of ticks, so it stays right when the tab is in the background,
+     when a phone sleeps, or after a refresh. Pause remembers what is left; resume sets a new end time. */
+  function makeCountdown(seconds, h) {
+    h = h || {};
+    var cd = { mode: 'idle', total: seconds * 1000, left: seconds * 1000, endAt: 0, handle: 0 };
+    function halt() { if (cd.handle) { clearInterval(cd.handle); cd.handle = 0; } }
+    function spin() { halt(); cd.handle = setInterval(cd.tick, 100); }
+    cd.tick = function () {
+      if (cd.mode !== 'run') return;
+      var left = cd.endAt - Date.now();
+      if (left <= 0) { cd.left = 0; cd.mode = 'done'; halt(); if (h.onDone) h.onDone(); }
+      else if (h.onTick) h.onTick(left);
+    };
+    cd.start = function () {
+      cd.left = cd.total; cd.endAt = Date.now() + cd.total; cd.mode = 'run'; spin();
+      if (h.onStart) h.onStart(); if (h.onTick) h.onTick(cd.left);
+    };
+    cd.pause = function () {
+      if (cd.mode !== 'run') return;
+      cd.left = Math.max(0, cd.endAt - Date.now()); cd.mode = 'pause'; halt();
+      if (h.onPause) h.onPause(); if (h.onTick) h.onTick(cd.left);
+    };
+    cd.resume = function () {
+      if (cd.mode !== 'pause') return;
+      cd.endAt = Date.now() + cd.left; cd.mode = 'run'; spin();
+      if (h.onStart) h.onStart(); if (h.onTick) h.onTick(cd.left);
+    };
+    cd.reset = function () { halt(); cd.mode = 'idle'; cd.left = cd.total; };
+    cd.setPaused = function (leftMs) { halt(); cd.mode = 'pause'; cd.left = leftMs; if (h.onTick) h.onTick(leftMs); };
+    cd.stop = halt;
+    return cd;
+  }
+
   function beep(freq, ms, when) {
     if (!state.sound) return;
     try {
       var ctx = timer.audio || (timer.audio = new (window.AudioContext || window.webkitAudioContext)());
+      if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
       var o = ctx.createOscillator(), g = ctx.createGain();
       o.type = 'square'; o.frequency.value = freq;
       var t0 = ctx.currentTime + (when || 0);
@@ -730,14 +802,31 @@
       o.start(t0); o.stop(t0 + ms / 1000 + .02);
     } catch (e) { /* audio is optional */ }
   }
+  // Browsers only allow sound after a tap, so every button that starts a clock calls this first.
+  function primeAudio() {
+    if (!state.sound) return;
+    try {
+      var ctx = timer.audio || (timer.audio = new (window.AudioContext || window.webkitAudioContext)());
+      if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
+    } catch (e) { /* audio is optional */ }
+  }
 
-  function stopTimer() { if (timer.handle) { clearInterval(timer.handle); timer.handle = 0; } }
+  function stopTimer() { if (timer.cd) { timer.cd.stop(); timer.cd = null; } }
+  // A hidden tab throttles timers, but the countdown compares clocks, so just catch up the moment the tab is back.
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && timer.cd && timer.cd.handle) timer.cd.tick(); });
 
+  function soundButton() {
+    var b = el('button', { type: 'button', class: 'btn btn-ghost btn-sm', id: 'btn-sound',
+      onclick: function () { state.sound = !state.sound; save(); b.textContent = state.sound ? 'Sound: on' : 'Sound: off'; if (state.sound) primeAudio(); } },
+      state.sound ? 'Sound: on' : 'Sound: off');
+    return b;
+  }
+
+  /* The quick timer (#/timer): just the clock, for groups that use paper cards. */
   function screenTimer() {
     var r = roundById(4);
-    var total = r.seconds;
+    var total = quiz.charades ? quiz.charades.secondsPerTurn : r.seconds;
     stopTimer();
-    timer.mode = 'idle';
     setCrumb('Round 4', 'Charades timer');
     document.title = 'Charades timer · ' + quiz.title;
 
@@ -746,68 +835,433 @@
     var fill = el('i');
     var meter = el('div', { class: 'meter', 'aria-hidden': 'true' }, fill);
     var startBtn = el('button', { type: 'button', class: 'btn btn-lg btn-pink', id: 'btn-timer-start' }, 'Start');
+    var pauseBtn = el('button', { type: 'button', class: 'btn btn-lg btn-navy', id: 'btn-timer-pause', disabled: true }, 'Pause');
     var restartBtn = el('button', { type: 'button', class: 'btn btn-lg btn-gold', id: 'btn-timer-restart' }, 'Restart');
-    var soundBtn = el('button', { type: 'button', class: 'btn btn-ghost btn-sm', id: 'btn-sound',
-      onclick: function () { state.sound = !state.sound; save(); soundBtn.textContent = state.sound ? 'Sound: on' : 'Sound: off'; } },
-      state.sound ? 'Sound: on' : 'Sound: off');
     var box = el('section', { class: 'timer', id: 'timer-box' },
-      el('div', { class: 'timer-rules', text: r.rules ? trimEnd(r.rules).split('\n')[0] : '' }),
       digits, unit, meter,
       el('div', { class: 'actions' },
-        startBtn, restartBtn,
+        startBtn, pauseBtn, restartBtn,
         el('button', { type: 'button', class: 'btn btn-lg btn-teal', onclick: function () { go('#/menu'); } }, 'Round menu')),
-      soundBtn);
+      soundButton());
 
-    function paint(remainingMs) {
-      var secs = Math.max(0, Math.ceil(remainingMs / 1000));
-      fill.style.transform = 'scaleX(' + Math.max(0, Math.min(1, remainingMs / (total * 1000))) + ')';
-      if (timer.mode === 'done') return;
+    var lastSecs = total;
+    function paint(ms) {
+      var secs = Math.max(0, Math.ceil(ms / 1000));
+      fill.style.transform = 'scaleX(' + Math.max(0, Math.min(1, ms / (total * 1000))) + ')';
       digits.textContent = String(secs);
-      box.classList.toggle('low', timer.mode === 'run' && secs <= 5);
-    }
-    function reset() {
-      stopTimer();
-      timer.mode = 'idle';
-      box.classList.remove('low', 'done');
-      digits.textContent = String(total);
-      unit.hidden = false;
-      startBtn.disabled = false;
-      startBtn.textContent = 'Start';
-      paint(total * 1000);
+      box.classList.toggle('low', cd.mode === 'run' && secs <= 5);
+      if (secs !== lastSecs && cd.mode === 'run' && ms <= 5000) beep(520, 70, 0);   // tick over the last five seconds
+      lastSecs = secs;
     }
     function finish() {
-      stopTimer();
-      timer.mode = 'done';
       box.classList.remove('low');
       box.classList.add('done');
       digits.textContent = r.endText || 'TIME!';
       unit.hidden = true;
       fill.style.transform = 'scaleX(0)';
-      startBtn.disabled = true;
-      startBtn.textContent = 'Start';
+      startBtn.disabled = true; startBtn.textContent = 'Start';
+      pauseBtn.disabled = true; pauseBtn.textContent = 'Pause';
       beep(880, 220, 0); beep(880, 220, .3); beep(1175, 600, .6);
     }
-    function start() {
-      if (timer.mode === 'run') return;
-      reset();
-      timer.mode = 'run';
-      startBtn.disabled = true;
-      startBtn.textContent = 'Running…';
-      timer.end = performance.now() + total * 1000;
-      beep(660, 120, 0);
-      timer.handle = setInterval(function () {
-        var left = timer.end - performance.now();
-        if (left <= 0) return finish();
-        var before = digits.textContent;
-        paint(left);
-        if (digits.textContent !== before && left <= 5000) beep(520, 70, 0);
-      }, 100);
+    var cd = makeCountdown(total, { onTick: paint, onDone: finish });
+    timer.cd = cd;
+    function idleLook() {
+      box.classList.remove('low', 'done');
+      unit.hidden = false;
+      startBtn.disabled = false; startBtn.textContent = 'Start';
+      pauseBtn.disabled = true; pauseBtn.textContent = 'Pause';
+      lastSecs = total;
+      digits.textContent = String(total); fill.style.transform = 'scaleX(1)';
     }
+    function start() {
+      if (cd.mode === 'run' || cd.mode === 'pause') return;
+      cd.reset(); idleLook(); primeAudio();
+      startBtn.disabled = true; startBtn.textContent = 'Running…'; pauseBtn.disabled = false;
+      beep(660, 120, 0);
+      cd.start();
+    }
+    function togglePause() {
+      if (cd.mode === 'run') { cd.pause(); pauseBtn.textContent = 'Resume'; startBtn.textContent = 'Paused'; }
+      else if (cd.mode === 'pause') { primeAudio(); cd.resume(); pauseBtn.textContent = 'Pause'; startBtn.textContent = 'Running…'; }
+    }
+    function restart() { cd.reset(); idleLook(); start(); }
     startBtn.addEventListener('click', start);
-    restartBtn.addEventListener('click', function () { reset(); start(); });
-    timer.api = { start: start, reset: reset };
+    pauseBtn.addEventListener('click', togglePause);
+    restartBtn.addEventListener('click', restart);
+    // Space on this screen: start, then pause / resume; after TIME! it starts a new countdown.
+    timer.api = {
+      space: function () { if (cd.mode === 'idle') start(); else if (cd.mode === 'done') restart(); else togglePause(); },
+      restart: restart
+    };
     paint(total * 1000);
     mount(box);
+  }
+
+  /* ---------------------------------------------------------------- charades cards */
+  function chCfg() { return quiz.charades || { pointsPerTitle: 10, secondsPerTurn: 30, titles: [] }; }
+  function chNames() { return chCfg().titles.map(function (t) { return t.title; }); }
+  function chLevel(title) {
+    var f = chCfg().titles.filter(function (t) { return t.title === title; })[0];
+    return f ? f.difficulty : 'medium';
+  }
+  function chMatches(title) {
+    var f = state.charades.filter, d = chLevel(title);
+    return f === 'all' || (f === 'easy' && d === 'easy') || (f === 'mh' && d !== 'easy');
+  }
+  function chTeamName(i) { return (state.teams[i] && state.teams[i].name) || 'Team ' + (i + 1); }
+  function shuffle(a) {
+    var b = a.slice();
+    for (var i = b.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = b[i]; b[i] = b[j]; b[j] = t; }
+    return b;
+  }
+
+  /* Keep the saved deck in step with the title list (a title may have been edited or added since). */
+  function chSync() {
+    var ch = state.charades, names = chNames(), ok = {}, inOrder = {};
+    names.forEach(function (n) { ok[n] = true; });
+    ch.order = ch.order.filter(function (n) { return ok[n]; });
+    ch.used = ch.used.filter(function (n) { return ok[n]; });
+    ch.skipped = ch.skipped.filter(function (n) { return ok[n]; });
+    if (ch.cur && !ok[ch.cur]) ch.cur = null;
+    ch.order.forEach(function (n) { inOrder[n] = true; });
+    var missing = names.filter(function (n) { return !inOrder[n]; });
+    if (missing.length) ch.order = ch.order.concat(shuffle(missing));   // first call of a game: the whole deck, shuffled once
+  }
+
+  /* Next card. Order: cards not seen yet; then the skipped ones (reshuffled once, they sit at the back of the deck);
+     when everything has been used, reshuffle the whole deck and start a new pass. Nothing repeats before that. */
+  function chDraw() {
+    var ch = state.charades, pick = null, seen = {};
+    chSync();
+    ch.used.concat(ch.skipped).forEach(function (n) { seen[n] = true; });
+    if (ch.cur) seen[ch.cur] = true;
+    for (var i = 0; i < ch.order.length && !pick; i++) {
+      if (!seen[ch.order[i]] && chMatches(ch.order[i])) pick = ch.order[i];
+    }
+    if (!pick && ch.skipped.some(chMatches)) {
+      if (!ch.skipShuffled) {
+        ch.skipped = shuffle(ch.skipped);
+        ch.skipShuffled = true;
+        if (ch.skipped.length > 1 && ch.skipped[0] === ch.last) ch.skipped.push(ch.skipped.shift());   // not the card just skipped
+      }
+      pick = ch.skipped.filter(chMatches)[0];
+      ch.skipped.splice(ch.skipped.indexOf(pick), 1);
+    }
+    if (!pick) {
+      ch.order = shuffle(chNames());
+      ch.used = []; ch.skipped = []; ch.skipShuffled = false; ch.cycle += 1;
+      var pool = ch.order.filter(chMatches);
+      pick = pool.filter(function (n) { return n !== ch.last; })[0] || pool[0];
+    }
+    ch.cur = pick || null;
+    save();
+    return ch.cur;
+  }
+  function chGot() {
+    var ch = state.charades;
+    if (!ch.cur) return;
+    ch.skipped = ch.skipped.filter(function (n) { return n !== ch.cur; });
+    ch.used.push(ch.cur); ch.tally += 1; ch.last = ch.cur; ch.cur = null;
+    chDraw();
+  }
+  function chSkip() {
+    var ch = state.charades;
+    if (!ch.cur) return;
+    ch.skipped = ch.skipped.filter(function (n) { return n !== ch.cur; }).concat(ch.cur);   // the back of the deck, not out of the game
+    ch.last = ch.cur; ch.cur = null;
+    chDraw();
+  }
+  function chPoints(tally) { return tally * chCfg().pointsPerTitle; }
+
+  /* The turn is over (time ran out, or the host ended it). A card still on screen goes to the back of the deck. */
+  function chFinishTurn(expired) {
+    var ch = state.charades;
+    if (ch.cur) { ch.skipped = ch.skipped.filter(function (n) { return n !== ch.cur; }).concat(ch.cur); ch.last = ch.cur; ch.cur = null; }
+    ch.phase = 'result'; ch.expired = !!expired; ch.running = false; ch.left = 0; ch.endAt = 0;
+    var t = ch.turns[ch.team] || { tally: 0, added: false, applied: 0 };
+    t.tally = ch.tally; ch.turns[ch.team] = t;
+    save();
+  }
+  /* Called before every render: a turn is only "running" while its screen is showing. If the page was refreshed or the host
+     went to another screen, the turn comes back paused with the time that was left, and the card hidden. */
+  function chSettle() {
+    var ch = state.charades;
+    if (ch.phase !== 'play' || !ch.running) return;
+    var left = ch.endAt - Date.now();
+    if (left <= 0) chFinishTurn(true);
+    else { ch.running = false; ch.left = left; }
+    save();
+  }
+
+  function chApplyEdit(team) {   // keep the scoreboard in step when a tally is edited after it was added
+    var ch = state.charades, t = ch.turns[team];
+    if (!t || !t.added) return;
+    var pts = chPoints(t.tally);
+    state.teams[team].score += pts - t.applied;
+    t.applied = pts;
+  }
+  function chAddScore(team) {
+    var t = state.charades.turns[team];
+    if (!t || t.added) return;
+    t.added = true; t.applied = chPoints(t.tally);
+    state.teams[team].score += t.applied;
+  }
+  function chDoneTeams() {
+    var ch = state.charades, out = [];
+    for (var i = 0; i < state.n; i++) if (ch.turns[i]) out.push(i);
+    return out;
+  }
+
+  function startCharades() {
+    var ch = state.charades;
+    if (ch.phase === 'idle') { ch.phase = 'pick'; ch.turns = {}; ch.team = -1; ch.tally = 0; ch.cur = null; }
+    save();
+    go('#/charades');
+  }
+  function askResetDeck() {
+    confirmDialog('Reset charades deck?', 'Every title goes back into the deck and the deck is reshuffled. Scores already added stay as they are.', 'Reset deck')
+      .then(function (ok) {
+        if (!ok) return;
+        var ch = state.charades;
+        ch.order = []; ch.used = []; ch.skipped = []; ch.skipShuffled = false; ch.cycle = 1; ch.last = null; ch.cur = null;
+        save();
+        toast('Charades deck reset.');
+        render();
+      });
+  }
+
+  /* Round 4 intro extras: difficulty filter, deck status, quick timer, print, reset. */
+  function charadesIntroControls() {
+    var ch = state.charades, titles = chCfg().titles, n = { all: titles.length, easy: 0, mh: 0 };
+    titles.forEach(function (t) { if (t.difficulty === 'easy') n.easy++; else n.mh++; });
+    var status = el('p', { class: 'ch-status', id: 'ch-status' });
+    function paintStatus() {
+      status.textContent = 'Deck: ' + titles.length + ' cards · ' + ch.used.length + ' guessed · ' + ch.skipped.length + ' skipped' +
+        (ch.cycle > 1 ? ' · pass ' + ch.cycle : '');
+    }
+    var group = el('fieldset', { class: 'ch-filter' }, el('legend', { text: 'Difficulty' }));
+    [['all', 'All (' + n.all + ')'], ['easy', 'Easy only (' + n.easy + ')'], ['mh', 'Medium and Hard (' + n.mh + ')']].forEach(function (o) {
+      var input = el('input', { type: 'radio', name: 'chfilter', value: o[0], onchange: function () { ch.filter = o[0]; save(); } });
+      if (ch.filter === o[0]) input.checked = true;
+      group.appendChild(el('label', null, input, el('span', { text: o[1] })));
+    });
+    paintStatus();
+    return el('div', { class: 'ch-intro' }, group, status,
+      el('div', { class: 'ch-intro-links' },
+        el('button', { type: 'button', class: 'btn btn-ghost btn-sm', id: 'btn-quicktimer', onclick: function () { go('#/timer'); } }, 'Quick timer (no cards)'),
+        el('a', { class: 'btn btn-ghost btn-sm', id: 'link-print', href: 'print.html', target: '_blank', rel: 'noopener' }, 'Print cards'),
+        el('button', { type: 'button', class: 'btn btn-ghost btn-sm', id: 'btn-reset-deck', onclick: askResetDeck }, 'Reset charades deck')));
+  }
+
+  /* ---- the turn: pick -> ready -> play -> result -> (next team) -> summary ---- */
+  function screenCharades() {
+    var ch = state.charades;
+    document.title = 'Charades · ' + quiz.title;   // never a card title, and no card ever goes in the URL
+    if (ch.phase === 'idle') { ch.phase = 'pick'; ch.turns = {}; ch.team = -1; save(); }
+    drawCharades(false);
+  }
+
+  function drawCharades(autostart) {
+    var ch = state.charades;
+    if (ch.phase !== 'play') stopTimer();
+    switch (ch.phase) {
+      case 'pick': drawPick(); break;
+      case 'ready': drawReady(); break;
+      case 'play': drawPlay(autostart); break;
+      case 'result': drawResult(); break;
+      default: drawSummary();
+    }
+    renderScoreboard();
+  }
+
+  function drawPick() {
+    var ch = state.charades;
+    setCrumb('Round 4 · Charades', 'Which team is acting?');
+    var next = -1;
+    for (var k = 0; k < state.n && next < 0; k++) if (!ch.turns[k]) next = k;
+    var grid = el('div', { class: 'ch-picker' });
+    for (var i = 0; i < state.n; i++) {
+      (function (i) {
+        var t = ch.turns[i];
+        var b = el('button', { type: 'button', class: 'ch-teambtn' + (i === next ? ' next' : ''), id: 'pick-' + i,
+          style: '--tcol:' + TEAM_COLORS[i], disabled: !!t,
+          onclick: function () { ch.team = i; ch.tally = 0; ch.cur = null; ch.expired = false; ch.phase = 'ready'; save(); drawCharades(); } },
+          el('span', { class: 'n', text: chTeamName(i) }),
+          el('span', { class: 's', text: t ? '✓ ' + t.tally + ' guessed · ' + chPoints(t.tally) + ' pts' : (i === next ? 'Up next' : 'Tap to act') }));
+        grid.appendChild(b);
+      })(i);
+    }
+    mount(el('section', { class: 'ch-wrap' },
+      el('h2', { class: 'ch-h', text: 'Which team is acting?' }), grid,
+      el('div', { class: 'actions' },
+        chDoneTeams().length ? el('button', { type: 'button', class: 'btn btn-gold', id: 'btn-finish-charades',
+          onclick: function () { ch.phase = 'summary'; save(); drawCharades(); } }, 'Finish charades') : null,
+        el('button', { type: 'button', class: 'btn btn-ghost', onclick: function () { go('#/round/4'); } }, 'Back'))));
+  }
+
+  function drawReady() {
+    var ch = state.charades;
+    setCrumb();   // no top bar: this screen is for the actor
+    mount(el('section', { class: 'ch-wrap ch-ready' },
+      el('div', { class: 'ch-teamname', id: 'ch-team', style: '--tcol:' + TEAM_COLORS[ch.team], text: chTeamName(ch.team) }),
+      el('p', { class: 'ch-lookaway', text: 'Actor, take the device. Everyone else look away.' }),
+      el('div', { class: 'actions' },
+        el('button', { type: 'button', class: 'btn btn-lg btn-pink ch-big', id: 'btn-show-card', onclick: showFirstCard }, 'Show first card')),
+      el('div', { class: 'actions' },
+        el('button', { type: 'button', class: 'btn btn-ghost btn-sm', onclick: function () { ch.phase = 'pick'; ch.team = -1; save(); drawCharades(); } }, 'Pick a different team'))));
+  }
+  function showFirstCard() {
+    var ch = state.charades;
+    if (ch.phase !== 'ready') return;
+    primeAudio();
+    ch.tally = 0; ch.cur = null; chDraw();
+    ch.phase = 'play'; ch.running = false; ch.left = chCfg().secondsPerTurn * 1000;
+    save();
+    drawCharades(true);
+  }
+
+  function drawPlay(autostart) {
+    var ch = state.charades, total = chCfg().secondsPerTurn;
+    setCrumb();
+    if (!ch.cur) chDraw();   // e.g. the deck was reset while a turn was paused
+    var digits = el('div', { class: 'digits', id: 'digits', role: 'timer', 'aria-live': 'off', text: String(total) });
+    var fill = el('i'), meter = el('div', { class: 'meter', 'aria-hidden': 'true' }, fill);
+    var cardEl = el('div', { class: 'ch-card', id: 'ch-card', 'aria-live': 'off' });
+    var tallyEl = el('span', { id: 'ch-tally', text: String(ch.tally) });
+    var gotBtn = el('button', { type: 'button', class: 'btn btn-lg btn-teal ch-act', id: 'btn-got', title: 'Got it (G)' }, 'Got it');
+    var skipBtn = el('button', { type: 'button', class: 'btn btn-lg btn-coral ch-act', id: 'btn-skip', title: 'Skip (S)' }, 'Skip');
+    var pauseBtn = el('button', { type: 'button', class: 'btn btn-gold', id: 'btn-pause', title: 'Pause / resume (Space)' }, 'Pause');
+    var endBtn = el('button', { type: 'button', class: 'btn btn-navy', id: 'btn-end-turn' }, 'End turn');
+    var box = el('section', { class: 'ch-play' },
+      el('div', { class: 'ch-top' },
+        el('span', { class: 'ch-who', style: '--tcol:' + TEAM_COLORS[ch.team], text: chTeamName(ch.team) }),
+        el('span', { class: 'ch-count' }, 'Guessed: ', tallyEl),
+        soundButton()),
+      el('div', { class: 'ch-clock' }, digits, meter),
+      cardEl,
+      el('div', { class: 'ch-actions' }, gotBtn, skipBtn),
+      el('div', { class: 'ch-actions2' }, pauseBtn, endBtn));
+
+    function paintCard() {
+      var paused = cd.mode !== 'run';
+      cardEl.classList.toggle('paused', paused);
+      cardEl.classList.toggle('long', !paused && !!ch.cur && ch.cur.length > 16);
+      cardEl.classList.toggle('short', !paused && !!ch.cur && ch.cur.length <= 7);   // short titles can be even bigger
+      cardEl.textContent = paused ? 'Paused' : (ch.cur || '');
+      // size by the longest word, so a long word is shrunk to fit and is never broken across two lines
+      cardEl.style.setProperty('--wl', String(Math.max.apply(null, (ch.cur || 'x').split(/\s+/).map(function (w) { return w.length; }))));
+      gotBtn.disabled = skipBtn.disabled = paused;
+      pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+      tallyEl.textContent = String(ch.tally);
+    }
+    function paintTime(ms) {
+      var secs = Math.max(0, Math.ceil(ms / 1000));
+      digits.textContent = String(secs);
+      fill.style.transform = 'scaleX(' + Math.max(0, Math.min(1, ms / (total * 1000))) + ')';
+      box.classList.toggle('low', cd.mode === 'run' && secs <= 5);   // red and pulsing for the last five seconds
+    }
+    var cd = makeCountdown(total, {
+      onStart: function () { ch.endAt = cd.endAt; ch.running = true; save(); },
+      onPause: function () { ch.running = false; ch.left = cd.left; ch.endAt = 0; save(); },
+      onTick: paintTime,
+      onDone: function () { beep(880, 450, 0); chFinishTurn(true); drawCharades(); }
+    });
+    timer.cd = cd;
+    timer.api = { space: chPauseToggle, got: chGotUI, skip: chSkipUI };
+
+    function chPauseToggle() {
+      if (cd.mode === 'run') { cd.pause(); paintCard(); }
+      else if (cd.mode === 'pause') { primeAudio(); cd.resume(); paintCard(); }
+    }
+    function chGotUI() { if (cd.mode !== 'run') return; chGot(); paintCard(); }
+    function chSkipUI() { if (cd.mode !== 'run') return; chSkip(); paintCard(); }
+    gotBtn.addEventListener('click', chGotUI);
+    skipBtn.addEventListener('click', chSkipUI);
+    pauseBtn.addEventListener('click', chPauseToggle);
+    endBtn.addEventListener('click', function () {
+      var wasRunning = cd.mode === 'run';
+      if (wasRunning) { cd.pause(); paintCard(); }
+      confirmDialog('End this turn?', 'The turn stops now. ' + ch.tally + (ch.tally === 1 ? ' title' : ' titles') + ' guessed so far.', 'End turn', { cancel: 'Keep going', okClass: 'btn-navy', focusOk: false })
+        .then(function (yes) {
+          if (yes) { cd.stop(); chFinishTurn(false); drawCharades(); }
+          else if (wasRunning && timer.cd === cd) { cd.resume(); paintCard(); }
+        });
+    });
+
+    mount(box);
+    if (autostart) { cd.start(); paintCard(); }
+    else { cd.setPaused(Math.max(1, ch.left)); paintCard(); }   // restored after a refresh or a visit elsewhere: paused, card hidden
+  }
+
+  function drawResult() {
+    var ch = state.charades, t = ch.turns[ch.team];
+    setCrumb('Round 4 · Charades', chTeamName(ch.team));
+    var pp = chCfg().pointsPerTitle;
+    var tallyEl = el('div', { class: 'ch-tally', id: 'ch-result-tally', text: String(ch.tally) });
+    var ptsEl = el('div', { class: 'ch-pts', id: 'ch-result-points' });
+    var addBtn = el('button', { type: 'button', class: 'btn btn-lg btn-teal', id: 'btn-add-score' });
+    function paint() {
+      tallyEl.textContent = String(ch.tally);
+      ptsEl.textContent = '= ' + chPoints(ch.tally) + ' points (' + ch.tally + ' × ' + pp + ')';
+      addBtn.disabled = !!t.added;
+      addBtn.textContent = t.added ? 'Added ✓ (' + t.applied + ')' : 'Add to score';
+      minus.disabled = ch.tally <= 0;
+    }
+    function edit(d) {
+      ch.tally = Math.max(0, ch.tally + d); t.tally = ch.tally;
+      chApplyEdit(ch.team);
+      save(); paint(); renderScoreboard();
+    }
+    var minus = el('button', { type: 'button', class: 'btn btn-ghost ch-pm', id: 'btn-tally-minus', 'aria-label': 'Remove one from the tally', onclick: function () { edit(-1); } }, '−');
+    var plus = el('button', { type: 'button', class: 'btn btn-ghost ch-pm', id: 'btn-tally-plus', 'aria-label': 'Add one to the tally', onclick: function () { edit(1); } }, '+');
+    addBtn.addEventListener('click', function () { chAddScore(ch.team); save(); paint(); renderScoreboard(); });
+    function next() {
+      ch.tally = 0; ch.team = -1; ch.expired = false;
+      ch.phase = chDoneTeams().length >= state.n ? 'summary' : 'pick';
+      save(); drawCharades();
+    }
+    mount(el('section', { class: 'ch-wrap ch-result' },
+      el('div', { class: 'ch-time', id: 'ch-time', text: ch.expired ? 'TIME!' : 'TURN ENDED' }),
+      el('div', { class: 'ch-who ch-who-lg', style: '--tcol:' + TEAM_COLORS[ch.team], text: chTeamName(ch.team) }),
+      el('div', { class: 'ch-editrow' }, minus, el('div', { class: 'ch-tallybox' }, tallyEl, el('div', { class: 'ch-cap', text: ch.tally === 1 ? 'title guessed' : 'titles guessed' })), plus),
+      el('div', { class: 'ch-editlabel', text: 'Edit tally' }),
+      ptsEl,
+      el('div', { class: 'actions' },
+        addBtn,
+        el('button', { type: 'button', class: 'btn btn-lg', id: 'btn-next-team', onclick: function () {
+          if (t.added) return next();
+          confirmDialog('Points not added yet', 'Add ' + chPoints(ch.tally) + ' points to ' + chTeamName(ch.team) + ' first?', 'Add and continue', { cancel: 'Skip them', okClass: 'btn-teal', focusOk: true })
+            .then(function (yes) { if (yes) { chAddScore(ch.team); save(); } next(); });
+        } }, 'Next team'))));
+    paint();
+  }
+
+  function drawSummary() {
+    var ch = state.charades, pp = chCfg().pointsPerTitle;
+    setCrumb('Round 4 · Charades', 'Charades summary');
+    var body = el('tbody');
+    var done = chDoneTeams(), total = 0, pending = false;
+    for (var i = 0; i < state.n; i++) {
+      var t = ch.turns[i];
+      if (t) { total += chPoints(t.tally); if (!t.added) pending = true; }
+      body.appendChild(el('tr', null,
+        el('th', { scope: 'row', style: '--tcol:' + TEAM_COLORS[i], text: chTeamName(i) }),
+        el('td', { text: t ? String(t.tally) : '—' }),
+        el('td', { class: 'pts', text: t ? String(chPoints(t.tally)) : '—' }),
+        el('td', { text: t ? (t.added ? 'on the scoreboard' : 'not added') : 'did not play' })));
+    }
+    var addAll = el('button', { type: 'button', class: 'btn btn-teal', id: 'btn-add-all', disabled: !pending,
+      onclick: function () { done.forEach(chAddScore); save(); drawCharades(); } }, 'Add all to scoreboard');
+    mount(el('section', { class: 'ch-wrap ch-summary' },
+      el('h2', { class: 'ch-h', text: 'Charades summary' }),
+      el('div', { class: 'card' }, el('table', { class: 'ch-table' },
+        el('thead', null, el('tr', null, el('th', { text: 'Team' }), el('th', { text: 'Titles' }), el('th', { text: 'Points (×' + pp + ')' }), el('th', { text: '' }))), body)),
+      el('p', { class: 'ch-total', text: 'Charades points handed out: ' + total }),
+      el('div', { class: 'actions' },
+        addAll,
+        el('button', { type: 'button', class: 'btn btn-lg btn-teal', id: 'btn-charades-menu', onclick: function () {
+          ch.turns = {}; ch.phase = 'idle'; ch.team = -1; ch.tally = 0; ch.expired = false; save(); go('#/menu');
+        } }, 'Back to Round Menu'))));
   }
 
   /* ---------------------------------------------------------------- end screen */
@@ -856,6 +1310,7 @@
   function render() {
     if (!quiz || !state) return;   // a hash change can arrive before quiz.json has loaded
     stopTimer();
+    chSettle();   // a charades turn only runs while its screen is showing
     hintUI = null;
     var old = document.querySelector('.confetti');
     if (old) old.remove();
@@ -871,10 +1326,11 @@
       case 'menu': screenMenu(); break;
       case 'host': screenHost(); break;
       case 'round': var rr = roundById(parseInt(r.arg, 10)); rr ? screenIntro(rr) : screenMenu(); break;
-      case 'board': var rb = roundById(parseInt(r.arg, 10)); rb && rb.type === 'timer' ? screenTimer() : rb ? screenBoard(rb) : screenMenu(); break;
+      case 'board': var rb = roundById(parseInt(r.arg, 10)); rb && rb.type === 'timer' ? (quiz.charades ? go('#/round/' + rb.id) : screenTimer()) : rb ? screenBoard(rb) : screenMenu(); break;
       case 'clue': info = index[r.arg]; info ? screenClue(info) : screenMenu(); break;
       case 'answer': info = index[r.arg]; info ? screenAnswer(info) : screenMenu(); break;
       case 'timer': screenTimer(); break;
+      case 'charades': screenCharades(); break;
       case 'end': screenEnd(); break;
       default: screenTitle();
     }
@@ -887,6 +1343,7 @@
     var r = parseHash();
     switch (r.name) {
       case 'clue': case 'answer': return backToBoard();
+      case 'charades': return go('#/round/4');
       case 'board': case 'round': case 'timer': case 'host': case 'end': return go('#/menu');
       case 'menu': return go('#/title');
     }
@@ -906,10 +1363,13 @@
     if (key === 'm' || key === 'M') { if (r.name !== 'title') { e.preventDefault(); go('#/menu'); } return; }
     if (key === ' ' || key === 'Enter' || key === 'Spacebar') {
       if (r.name === 'clue') { e.preventDefault(); return go('#/answer/' + r.arg); }
-      if (r.name === 'timer' && timer.api) {
+      if (r.name === 'timer' && timer.api) { e.preventDefault(); return timer.api.space(); }
+      if (r.name === 'charades') {   // Space = start / pause (Enter keeps its normal button behaviour)
+        if (key === 'Enter') return;
         e.preventDefault();
-        if (timer.mode === 'idle') timer.api.start();
-        else if (timer.mode === 'done') { timer.api.reset(); timer.api.start(); }
+        var cph = state.charades.phase;
+        if (cph === 'ready') return showFirstCard();
+        if (cph === 'play' && timer.api) return timer.api.space();
         return;
       }
       if (r.name === 'title') { if (tag !== 'BUTTON') { e.preventDefault(); go('#/menu'); } return; }
@@ -921,11 +1381,15 @@
       return;
     }
     if ((key === 'h' || key === 'H') && r.name === 'clue') { e.preventDefault(); return revealHint(); }
-    if ((key === 'r' || key === 'R') && r.name === 'timer' && timer.api) { e.preventDefault(); timer.api.reset(); timer.api.start(); }
+    if ((key === 'r' || key === 'R') && r.name === 'timer' && timer.api) { e.preventDefault(); return timer.api.restart(); }
+    if (r.name === 'charades' && state.charades.phase === 'play' && timer.api) {   // host shortcuts on a laptop
+      if (key === 'g' || key === 'G') { e.preventDefault(); return timer.api.got(); }
+      if (key === 's' || key === 'S') { e.preventDefault(); return timer.api.skip(); }
+    }
   });
   // Stop Space on a focused button from also firing a click after we've handled it.
   document.addEventListener('keyup', function (e) {
-    if ((e.key === ' ' || e.key === 'Spacebar') && ['clue', 'timer'].indexOf(parseHash().name) >= 0 &&
+    if ((e.key === ' ' || e.key === 'Spacebar') && ['clue', 'timer', 'charades'].indexOf(parseHash().name) >= 0 &&
       e.target && e.target.tagName === 'BUTTON' && !e.target.closest('dialog')) e.preventDefault();
   });
 

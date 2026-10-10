@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Charades cards · Bollywood Quiz Night</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%AC%3C/text%3E%3C/svg%3E">
+  <style>
+    /* 8 cards per sheet: 2 columns x 4 rows of 90 x 62 mm cards. That is 180 x 248 mm, which fits inside the margins of
+       both A4 (210 x 297 mm) and US Letter (216 x 279 mm), so the same page prints right on either paper. */
+    :root { --maroon: #6e1e3b; --cream: #fff4df; --navy: #1c2632; --gold: #f2b84b; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", "Trebuchet MS", system-ui, sans-serif; color: var(--navy); background: #ece6dc; }
+    .bar { position: sticky; top: 0; z-index: 2; background: var(--navy); color: #fff; padding: .7rem 1rem; display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; align-items: center; }
+    .bar h1 { font-size: 1.1rem; margin: 0 auto 0 0; }
+    .bar label { font-size: .85rem; display: inline-flex; gap: .4rem; align-items: center; }
+    .bar select, .bar button, .bar a { font: inherit; font-size: .9rem; border-radius: .4rem; border: 0; padding: .45rem .8rem; }
+    .bar button { background: var(--gold); color: var(--navy); font-weight: 800; cursor: pointer; }
+    .bar a { background: #fff; color: var(--navy); text-decoration: none; font-weight: 700; }
+    .note { max-width: 46rem; margin: 1rem auto 0; padding: 0 1rem; font-size: .9rem; }
+    #sheets { padding: 1rem; display: grid; gap: 1.2rem; justify-content: center; }
+    .sheet { background: #fff; display: grid; grid-template-columns: repeat(2, 90mm); grid-auto-rows: 62mm; justify-content: center; align-content: start; padding: 10mm 0; box-shadow: 0 .2rem 1rem rgba(0, 0, 0, .2); width: 210mm; max-width: 100%; overflow: hidden; }
+    .card { border: .3mm dashed #777; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 5mm; font-weight: 800; color: var(--maroon); line-height: 1.1; overflow-wrap: anywhere; font-size: 9mm; position: relative; }
+    .card.long { font-size: 7mm; }
+    .card small { position: absolute; top: 3mm; left: 0; right: 0; font-size: 2.6mm; letter-spacing: .3em; text-transform: uppercase; color: #999; font-weight: 700; }
+    .card .lvl { position: absolute; bottom: 2.5mm; right: 3.5mm; font-size: 2.8mm; color: #777; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    #error { display: none; margin: 2rem auto; max-width: 36rem; background: #fff; padding: 1rem 1.2rem; border-radius: .6rem; }
+    @media print {
+      @page { margin: 10mm; }
+      body { background: #fff; }
+      .bar, .note, #error { display: none !important; }
+      #sheets { padding: 0; gap: 0; display: block; }
+      .sheet { width: auto; padding: 0; box-shadow: none; break-after: page; page-break-after: always; }
+      .sheet:last-child { break-after: auto; page-break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <h1>Charades cards</h1>
+    <label>Titles
+      <select id="filter">
+        <option value="all">All</option>
+        <option value="easy">Easy only</option>
+        <option value="mh">Medium and Hard</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="lvl"> Show difficulty on the cards</label>
+    <button type="button" id="print">Print</button>
+    <a href="index.html">Back to the quiz</a>
+  </div>
+  <p class="note">Prints 8 cut-out cards per page on A4 or Letter. Cut along the dashed lines. In the print dialog set margins to Default and scale to 100%.</p>
+  <div id="error"></div>
+  <main id="sheets" aria-live="polite"></main>
+  <script>
+    (function () {
+      var PER_SHEET = 8;
+      var titles = [];
+      var sheets = document.getElementById('sheets');
+      var filter = document.getElementById('filter');
+      var lvl = document.getElementById('lvl');
+
+      function render() {
+        var f = filter.value;
+        var list = titles.filter(function (t) { return f === 'all' || (f === 'easy' && t.difficulty === 'easy') || (f === 'mh' && t.difficulty !== 'easy'); });
+        sheets.textContent = '';
+        for (var i = 0; i < list.length; i += PER_SHEET) {
+          var sheet = document.createElement('section');
+          sheet.className = 'sheet';
+          list.slice(i, i + PER_SHEET).forEach(function (t) {
+            var card = document.createElement('div');
+            card.className = 'card' + (t.title.length > 18 ? ' long' : '');
+            var cap = document.createElement('small'); cap.textContent = 'Filmi charades';
+            var name = document.createElement('span'); name.textContent = t.title;
+            card.appendChild(cap); card.appendChild(name);
+            if (lvl.checked) { var l = document.createElement('span'); l.className = 'lvl'; l.textContent = t.difficulty; card.appendChild(l); }
+            sheet.appendChild(card);
+          });
+          sheets.appendChild(sheet);
+        }
+        document.title = 'Charades cards (' + list.length + ') · Bollywood Quiz Night';
+      }
+
+      filter.addEventListener('change', render);
+      lvl.addEventListener('change', render);
+      document.getElementById('print').addEventListener('click', function () { window.print(); });
+
+      fetch('quiz.json').then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(function (q) {
+        titles = (q.charades && q.charades.titles) || [];
+        render();
+      }).catch(function (e) {
+        var box = document.getElementById('error');
+        box.style.display = 'block';
+        box.textContent = 'Could not load quiz.json (' + e.message + '). Open this page through a web server, not straight from disk.';
+      });
+    })();
+  </script>
+</body>
+</html>

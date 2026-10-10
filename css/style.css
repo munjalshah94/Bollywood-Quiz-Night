@@ -295,6 +295,79 @@ dialog p { margin: 0 0 1.2rem; }
 .keys dd { margin: 0; line-height: 1.35; }
 kbd { display: inline-block; min-width: 1.8em; text-align: center; padding: .05rem .45rem; margin-right: .15rem; border: .12rem solid var(--maroon); border-bottom-width: .25rem; border-radius: .4rem; background: var(--cream); color: var(--ink); font: 700 .9em ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
 
+/* ---------- charades cards ---------- */
+.ch-pp { margin: .8rem 0 0; font-weight: 800; color: var(--teal); }
+.ch-intro { margin-top: .8rem; display: grid; gap: .7rem; justify-items: center; }
+.ch-filter { border: .15rem solid var(--lavender); border-radius: 1rem; padding: .3rem .8rem .7rem; margin: 0; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; background: rgba(255, 255, 255, .7); }
+.ch-filter legend { font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--maroon); padding: 0 .4rem; }
+.ch-filter label { cursor: pointer; }
+.ch-filter input { position: absolute; opacity: 0; pointer-events: none; }
+.ch-filter span { display: inline-block; padding: .55rem 1rem; border-radius: 2rem; border: .15rem solid var(--maroon); font-weight: 800; background: var(--white); color: var(--maroon); }
+.ch-filter input:checked + span { background: var(--maroon); color: var(--white); }
+.ch-filter input:focus-visible + span { outline: .22rem solid var(--gold); outline-offset: .12rem; }
+.ch-status { margin: 0; font-weight: 700; font-size: .9rem; }
+.ch-intro-links { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+
+.ch-wrap { width: 100%; max-width: 72rem; margin: .5rem auto 0; text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; }
+.ch-h { font-size: clamp(1.5rem, min(3.6vw, 5vh), 2.8rem); color: var(--maroon); font-weight: 900; margin: .1rem 0 .6rem; }
+.ch-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; width: 100%; }
+.ch-teambtn { font: inherit; cursor: pointer; border: .25rem solid transparent; border-radius: 1.2rem; padding: 1.2rem 1rem; min-height: 7.5rem; background: var(--tcol); color: var(--white); display: grid; place-content: center; gap: .3rem; box-shadow: var(--shadow); transition: transform .1s ease; }
+.ch-teambtn:hover:not(:disabled) { transform: translateY(-.15rem); }
+.ch-teambtn .n { font-size: clamp(1.4rem, 2.6vw, 2.4rem); font-weight: 900; overflow-wrap: anywhere; }
+.ch-teambtn .s { font-size: .9rem; font-weight: 700; opacity: .92; }
+.ch-teambtn.next { border-color: var(--gold); box-shadow: 0 0 0 .2rem rgba(242, 184, 75, .55), var(--shadow); }
+.ch-teambtn:disabled { opacity: .55; cursor: default; filter: grayscale(.4); }
+.ch-teambtn:focus-visible { outline: .25rem solid var(--gold); outline-offset: .15rem; }
+
+.ch-ready { justify-content: center; gap: .6rem; }
+.ch-teamname { font-size: clamp(2.8rem, min(11vw, 16vh), 9rem); font-weight: 900; line-height: 1.05; color: var(--tcol, var(--maroon)); overflow-wrap: anywhere; }
+.ch-lookaway { font-size: clamp(1.4rem, min(3.4vw, 5vh), 2.6rem); font-weight: 800; margin: .4rem 0 1rem; max-width: 40rem; }
+.ch-big { font-size: clamp(1.3rem, 3vw, 2rem); padding: 1.2rem 2.6rem; min-height: 4.2rem; }
+
+.ch-play { width: 100%; max-width: 80rem; margin: 0 auto; flex: 1; display: flex; flex-direction: column; gap: .8rem; min-height: calc(100vh - 3.2rem); text-align: center; }
+@supports (height: 100dvh) { .ch-play { min-height: calc(100dvh - 3.2rem); } }
+.ch-top { display: flex; align-items: center; justify-content: space-between; gap: .6rem; flex-wrap: wrap; }
+.ch-who { display: inline-block; padding: .3rem 1rem; border-radius: 2rem; background: var(--tcol, var(--maroon)); color: var(--white); font-weight: 900; font-size: clamp(1rem, 2vw, 1.5rem); overflow-wrap: anywhere; }
+.ch-who-lg { font-size: clamp(1.4rem, min(3vw, 4.5vh), 2.4rem); margin: .2rem 0 .5rem; }
+.ch-count { font-weight: 900; font-size: clamp(1rem, 2vw, 1.6rem); }
+.ch-clock { display: grid; gap: .4rem; }
+.ch-clock .digits { font-size: clamp(3.4rem, min(14vw, 15vh), 8rem); font-weight: 900; line-height: 1; color: var(--pink); font-variant-numeric: tabular-nums; }
+.ch-clock .meter { height: clamp(.7rem, 1.8vh, 1.2rem); border-radius: 2rem; border: .18rem solid var(--coral); background: var(--white); overflow: hidden; }
+.ch-clock .meter i { display: block; height: 100%; width: 100%; background: var(--coral); transform-origin: left; transition: transform .12s linear; }
+.ch-play.low .digits { color: #c8102e; animation: pulse .5s ease-in-out infinite alternate; }
+.ch-play.low .meter { border-color: #c8102e; }
+.ch-play.low .meter i { background: #c8102e; }
+.ch-card {
+  flex: 1; display: grid; place-items: center; background: var(--white); border: .25rem solid var(--maroon); border-radius: 1.4rem; box-shadow: var(--shadow);
+  padding: 1rem 1.2rem; min-height: 9rem; font-weight: 900; color: var(--maroon); line-height: 1.05; overflow-wrap: anywhere; text-wrap: balance;
+  font-size: clamp(2.4rem, min(14vw, 13vh, calc(72vw / (var(--wl, 8) * .7))), 9rem);
+}
+.ch-card.long { font-size: clamp(2.2rem, min(11vw, 10.5vh, calc(72vw / (var(--wl, 8) * .7))), 7rem); }
+.ch-card.short { font-size: clamp(2.6rem, min(17vw, 14vh, calc(72vw / (var(--wl, 8) * .7))), 10rem); }
+.ch-card.paused { color: var(--lavender); border-style: dashed; font-size: clamp(2rem, 8vw, 4.5rem); letter-spacing: .1em; text-transform: uppercase; }
+.ch-actions { display: grid; grid-template-columns: 1.4fr 1fr; gap: .8rem; }
+.ch-act { min-height: 4.8rem; font-size: clamp(1.4rem, 3.2vw, 2.4rem); }
+.ch-actions2 { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+.ch-actions2 .btn { min-width: 9rem; }
+
+.ch-result { justify-content: center; gap: .3rem; }
+.ch-time { font-size: clamp(2.6rem, min(11vw, 12vh), 8rem); font-weight: 900; line-height: 1; color: var(--pink); }
+.ch-editrow { display: flex; align-items: center; justify-content: center; gap: clamp(.8rem, 3vw, 2rem); margin-top: .2rem; }
+.ch-tallybox { min-width: 8rem; }
+.ch-tally { font-size: clamp(4rem, min(16vw, 16vh), 10rem); font-weight: 900; line-height: 1; color: var(--maroon); font-variant-numeric: tabular-nums; }
+.ch-cap { font-weight: 800; letter-spacing: .08em; text-transform: uppercase; font-size: .85rem; }
+.ch-pm { width: 4.2rem; height: 4.2rem; padding: 0; border-radius: 50%; font-size: 2.2rem; line-height: 1; display: grid; place-items: center; }
+.ch-editlabel { font-size: .75rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); margin-top: .3rem; }
+.ch-pts { font-size: clamp(1.3rem, min(3vw, 4.5vh), 2.2rem); font-weight: 900; margin: .3rem 0 .2rem; }
+.ch-summary { gap: .6rem; }
+.ch-table { width: 100%; border-collapse: collapse; font-size: clamp(1rem, min(1.7vw, 2.8vh), 1.4rem); }
+.ch-table th, .ch-table td { padding: .4rem .7rem; text-align: center; border-bottom: .1rem solid var(--blush); }
+.ch-table thead th { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+.ch-table tbody th { text-align: left; color: var(--tcol, var(--maroon)); font-weight: 900; }
+.ch-table td.pts { font-weight: 900; color: var(--maroon); font-variant-numeric: tabular-nums; }
+.ch-total { font-weight: 900; font-size: clamp(1.1rem, 2.2vw, 1.8rem); margin: .4rem 0 0; }
+
 /* ---------- small screens ---------- */
 @media (max-width: 760px) {
   html { font-size: 15px; }
@@ -321,6 +394,11 @@ kbd { display: inline-block; min-width: 1.8em; text-align: center; padding: .05r
   .team .tscore { font-size: 1.5rem; }
   .podium li { font-size: 1rem; }
   .help-btn { top: .7rem; right: .7rem; }
+  .ch-actions { grid-template-columns: 1fr; }
+  .ch-act { min-height: 4.4rem; }
+  .ch-table th, .ch-table td { padding: .5rem .3rem; }
+  .ch-table td:last-child, .ch-table thead th:last-child { display: none; }
+  .ch-pm { width: 3.8rem; height: 3.8rem; }
   .keys { grid-template-columns: 1fr; gap: .1rem; }
   .keys dd { margin-bottom: .5rem; }
 }
