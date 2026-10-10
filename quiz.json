@@ -3,6 +3,172 @@
   "enabled": true,
   "penaltyPercent": 0
  },
+ "charades": {
+  "pointsPerTitle": 10,
+  "secondsPerTurn": 30,
+  "titles": [
+   {
+    "title": "Sholay",
+    "difficulty": "easy"
+   },
+   {
+    "title": "3 Idiots",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Dangal",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Don",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Singham",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Dabangg",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Pathaan",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Jawan",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Baahubali",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Krrish",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Bajrangi Bhaijaan",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Chennai Express",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Golmaal",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Kabir Singh",
+    "difficulty": "easy"
+   },
+   {
+    "title": "Munna Bhai MBBS",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Kal Ho Naa Ho",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Jab We Met",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Zindagi Na Milegi Dobara",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Dil Chahta Hai",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Barfi",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Queen",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Swades",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Stree",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Bhool Bhulaiyaa",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Drishyam",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Kahaani",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Devdas",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Raazi",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Bajirao Mastani",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Chhichhore",
+    "difficulty": "medium"
+   },
+   {
+    "title": "Andaz Apna Apna",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Mr. India",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Gangs of Wasseypur",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Tumbbad",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Jaane Bhi Do Yaaro",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Amar Akbar Anthony",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Pyaasa",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Lage Raho Munna Bhai",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Koi Mil Gaya",
+    "difficulty": "hard"
+   },
+   {
+    "title": "Padosan",
+    "difficulty": "hard"
+   }
+  ]
+ },
  "title": "Bollywood Quiz Night",
  "startLabel": "START THE SHOW",
  "titleImage": {
@@ -1497,7 +1663,7 @@
    "name": "CHARADES TIMER",
    "type": "timer",
    "introTitle": null,
-   "rules": "Give one physical card to the acting player. Start the timer and count how many titles their team guesses in 30 seconds.\n\nReuse the timer for each team.",
+   "rules": "Rules:\nOne actor per turn.\n30 seconds on the clock.\nCount how many titles the team guesses.\nThe same timer is reused for each team.",
    "seconds": 30,
    "unitLabel": "seconds remaining",
    "endText": "TIME!",

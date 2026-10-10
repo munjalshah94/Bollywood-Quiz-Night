@@ -428,6 +428,14 @@ prev_path = os.path.join(out, 'quiz.json')
 if os.path.exists(prev_path):
     prev = json.load(open(prev_path, encoding='utf-8'))
     quiz['hints'] = prev.get('hints', quiz['hints'])
+    # the charades deck lives in charades_titles.md / sync_charades.js, and round 4's rules were reworded for in-app cards
+    if 'charades' in prev:
+        quiz = {'hints': quiz['hints'], 'charades': prev['charades'], **{k: v for k, v in quiz.items() if k not in ('hints', 'charades')}}
+    prev_r4 = [r for r in prev['rounds'] if r['id'] == 4]
+    if prev_r4 and prev_r4[0].get('rules'):
+        for r in quiz['rounds']:
+            if r['id'] == 4:
+                r['rules'] = prev_r4[0]['rules']
     prev_clues = {}
     for r in prev['rounds']:
         for c in [c for cat in r.get('categories', []) for c in cat['clues']] + r.get('clues', []):
