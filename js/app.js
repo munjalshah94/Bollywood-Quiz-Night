@@ -173,11 +173,32 @@
   function hintCost(c) { var pct = Number(hintCfg().penaltyPercent) || 0; return Math.max(0, Math.round(c.points * pct / 100 / 5) * 5); }
   function runOf(info) { return state.run && state.run.id === info.clue.id ? state.run : null; }
   function hintsUsed(info) { var run = runOf(info); return run ? Math.min(run.hints | 0, clueHints(info.clue).length) : 0; }
-  /* What the answering team earns now: points + 10 per pass - hint cost (never below 0). */
+  /* Nearest ten, halves round up: 85 -> 90, 75 -> 80, 65 -> 70. */
+  function roundTo10(x) { return Math.max(0, Math.floor(x / 10 + 0.5) * 10); }
+  /* What the answering team earns now.
+     Lap 1: points + 10 per pass - hint cost.
+     Lap 2 (everyone failed lap 1): half of the lap-1 value (nearest ten), + 10 per pass since, - cost of hints revealed since. Never below 0. */
   function clueValue(info) {
-    var run = runOf(info);
-    var gross = info.clue.points + 10 * (run ? run.passes : 0);
-    return Math.max(0, gross - hintsUsed(info) * hintCost(info.clue));
+    var run = runOf(info), cost = hintCost(info.clue), used = hintsUsed(info);
+    if (run && run.r2) {
+      return Math.max(0, run.r2.value + 10 * (run.passes - run.r2.from) - (used - run.r2.hintsAt) * cost);
+    }
+    return Math.max(0, info.clue.points + 10 * (run ? run.passes : 0) - used * cost);
+  }
+  /* Where the clue is in the passing cycle: 'lap1', 'ready-lap2' (every team has had a go, round 2 can start),
+     'lap2' or 'done' (both laps used up). */
+  function passState(info) {
+    var run = info && runOf(info);
+    if (!run) return 'lap1';
+    if (!run.r2) return run.passes >= state.n - 1 ? 'ready-lap2' : 'lap1';
+    return run.passes - run.r2.from >= state.n - 1 ? 'done' : 'lap2';
+  }
+  function passLabel(st) {
+    return st === 'ready-lap2' ? 'Round 2 \u00b7 half points' : st === 'done' ? 'No passes left' : 'Pass \u21aa +10';
+  }
+  function passTitle(st) {
+    return st === 'ready-lap2' ? 'Nobody got it: go round again for half points' :
+      st === 'done' ? 'Both rounds of passing are used up' : 'Pass the question to the next team (+10 bonus)';
   }
   /* Button or H: ask "Are you sure?" first. Only Yes shows the hint; No (or Esc) leaves it hidden. */
   var hintAsking = false;
@@ -204,15 +225,32 @@
     save();
     renderScoreboard();
   }
+  var passAsking = false;
   function passClue() {
     var info = currentClueInfo();
     if (!info || parseHash().name !== 'clue') return toast('Pass is only available while a clue is open.');
-    var run = runFor(info);
-    if (run.passes >= state.n - 1) return toast('Every team has already had a go.');
+    if (passAsking || $dlg.open) return;
+    var run = runFor(info), st = passState(info);
+    if (st === 'done') return toast('No passes left: both rounds are used up.');
+    if (st === 'ready-lap2') {
+      // every team has had a go: offer a second lap at half points
+      var was = clueValue(info), half = roundTo10(was / 2);
+      passAsking = true;
+      confirmDialog('Nobody got it?', 'Everyone has had a go. Go round again for ' + half + ' points (half of ' + was + ')?', 'Yes',
+        { cancel: 'No', okClass: 'btn-teal', focusOk: true }).then(function (yes) {
+        passAsking = false;
+        if (!yes || parseHash().name !== 'clue' || !state.run || state.run.id !== info.clue.id || state.run.r2) return;
+        state.run.passes += 1;   // steps round to the team that asked first
+        state.run.r2 = { value: half, was: was, from: state.run.passes, hintsAt: hintsUsed(info) };
+        save();
+        toast('Round 2: ' + state.teams[answeringIndex()].name + ' is up for ' + half + ' (half of ' + was + ')');
+        render();
+      });
+      return;
+    }
     run.passes += 1;
     save();
-    toast('Passed to ' + state.teams[answeringIndex()].name + ' — clue now worth ' +
-      (info.clue.points + 10 * run.passes) + ' (+' + (10 * run.passes) + ' pass bonus)');
+    toast('Passed to ' + state.teams[answeringIndex()].name + ' \u2014 clue now worth ' + clueValue(info));
     render();
   }
   function backToBoard() {
@@ -237,6 +275,7 @@
     var info = currentClueInfo();
     var val = stepValue();
     var canPass = route === 'clue';
+    var passSt = canPass ? passState(info) : 'lap1';
 
     var stepSel = el('select', {
       id: 'step', 'aria-label': 'Points per tap',
@@ -272,8 +311,8 @@
       el('div', { class: 'sb-tools sb-full' },
         el('label', null, 'Teams ', nSel),
         el('label', null, 'Tap = ±', stepSel),
-        el('button', { type: 'button', class: 'btn btn-coral btn-sm', id: 'btn-pass', disabled: !canPass,
-          title: 'Pass the question to the next team (+10 bonus)', onclick: passClue }, 'Pass ↪ +10'),
+        el('button', { type: 'button', class: 'btn btn-coral btn-sm', id: 'btn-pass', disabled: !canPass || passSt === 'done',
+          title: passTitle(passSt), onclick: passClue }, passLabel(passSt)),
         el('button', { type: 'button', class: 'btn btn-ghost btn-sm', onclick: askReset }, 'Reset game')));
 
     var teams = el('div', { class: 'sb-teams', style: '--n:' + state.n });
@@ -578,7 +617,8 @@
       el('div', { class: 'actions' },
         el('button', { type: 'button', class: 'btn btn-lg', id: 'btn-reveal', onclick: function () { go('#/answer/' + c.id); } }, 'Reveal answer'),
         hintBtn,
-        el('button', { type: 'button', class: 'btn btn-lg btn-coral', onclick: passClue, title: 'Pass to the next team (+10)' }, 'Pass ↪ +10'),
+        el('button', { type: 'button', class: 'btn btn-lg btn-coral', id: 'btn-pass-clue', onclick: passClue,
+          disabled: passState(info) === 'done', title: passTitle(passState(info)) }, passLabel(passState(info))),
         el('button', { type: 'button', class: 'btn btn-lg btn-teal', onclick: backToBoard }, 'Back to board'),
         run.advance ? el('button', { type: 'button', class: 'btn btn-sm btn-ghost', id: 'btn-unuse',
           title: 'Opened by mistake? Put this tile back on the board.',
@@ -624,11 +664,17 @@
     var run = runOf(info);
     if (!run) return '';
     var who = state.teams[(run.asker + run.passes) % state.n].name;
-    var used = hintsUsed(info), cost = hintCost(info.clue) * used;
+    var used = hintsUsed(info), cost = hintCost(info.clue);
     var notes = [];
-    if (run.passes) notes.push('+' + (10 * run.passes) + ' pass bonus');
-    if (cost) notes.push('\u2212' + cost + ' for ' + used + (used === 1 ? ' hint' : ' hints'));
-    return 'Answering: ' + who + ' \u00b7 worth ' + clueValue(info) + (notes.length ? ' (' + notes.join(', ') + ')' : '');
+    if (run.r2) {
+      notes.push('halved from ' + run.r2.was);
+      if (run.passes > run.r2.from) notes.push('+' + (10 * (run.passes - run.r2.from)) + ' pass bonus');
+      if (used > run.r2.hintsAt) notes.push('\u2212' + (cost * (used - run.r2.hintsAt)) + ' for hints');
+    } else {
+      if (run.passes) notes.push('+' + (10 * run.passes) + ' pass bonus');
+      if (cost && used) notes.push('\u2212' + (cost * used) + ' for ' + used + (used === 1 ? ' hint' : ' hints'));
+    }
+    return 'Answering: ' + who + ' \u00b7 ' + (run.r2 ? 'round 2 \u00b7 ' : '') + 'worth ' + clueValue(info) + (notes.length ? ' (' + notes.join(', ') + ')' : '');
   }
 
   function runChip(info) {
