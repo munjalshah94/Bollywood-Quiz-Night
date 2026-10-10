@@ -13,6 +13,7 @@
   var $crumb = document.getElementById('crumb');
   var $sb = document.getElementById('scoreboard');
   var $dlg = document.getElementById('dlg');
+  var $help = document.getElementById('help');
 
   var quiz = null;
   var index = {};      // clue id -> { round, clue, cat, label }
@@ -419,6 +420,13 @@
     window.scrollTo(0, 0);
   }
 
+  /* The "?" controls guide: a modal dialog over the page (no navigation, the URL never changes). */
+  function openHelp() {
+    if (!$help || $help.open || document.querySelector('dialog[open]')) return;
+    if ($help.showModal) $help.showModal(); else $help.setAttribute('open', '');
+  }
+  function anyDialogOpen() { return !!document.querySelector('dialog[open]'); }
+
   function screenTitle() {
     setCrumb();
     document.title = quiz.title;
@@ -426,6 +434,8 @@
     var scored = state.teams.slice(0, state.n).some(function (t) { return t.score; });
     var bg = quiz.titleImage.src;
     var node = el('section', { class: 'title-screen', style: 'background-image:url("' + bg + '")' },
+      el('button', { type: 'button', class: 'help-btn', id: 'btn-help', onclick: openHelp,
+        'aria-label': 'How to play: controls', 'aria-haspopup': 'dialog', title: 'How to play: controls (?)' }, '?'),
       el('div', { class: 'title-inner' },
         el('h1', { text: quiz.title }),
         el('p', { class: 'sub', text: 'Five rounds of filmi fun' + (used || scored ? ' · game in progress' : '') }),
@@ -884,13 +894,14 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
-    if ($dlg.open) return;
+    if (anyDialogOpen()) return;   // a dialog is in front: keys must not act on the page behind it
     var tag = (e.target && e.target.tagName) || '';
     var typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
     if (typing) return;
     var r = parseHash();
     var key = e.key;
 
+    if (key === '?' && r.name === 'title') { e.preventDefault(); return openHelp(); }
     if (key === 'Escape') { e.preventDefault(); return goBack(); }
     if (key === 'm' || key === 'M') { if (r.name !== 'title') { e.preventDefault(); go('#/menu'); } return; }
     if (key === ' ' || key === 'Enter' || key === 'Spacebar') {
@@ -915,10 +926,24 @@
   // Stop Space on a focused button from also firing a click after we've handled it.
   document.addEventListener('keyup', function (e) {
     if ((e.key === ' ' || e.key === 'Spacebar') && ['clue', 'timer'].indexOf(parseHash().name) >= 0 &&
-      e.target && e.target.tagName === 'BUTTON' && !$dlg.contains(e.target)) e.preventDefault();
+      e.target && e.target.tagName === 'BUTTON' && !e.target.closest('dialog')) e.preventDefault();
   });
 
   document.getElementById('btn-menu').addEventListener('click', function () { go('#/menu'); });
+  if ($help) {
+    var closeHelp = function () { $help.close(); };
+    document.getElementById('help-close').addEventListener('click', closeHelp);
+    document.getElementById('help-x').addEventListener('click', closeHelp);
+    // a click outside the box (on the dimmed backdrop) closes it too
+    $help.addEventListener('click', function (e) {
+      var r = $help.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeHelp();
+    });
+    $help.addEventListener('close', function () {
+      var b = document.getElementById('btn-help');
+      if (b) b.focus();   // give focus back to the ? button
+    });
+  }
   window.addEventListener('hashchange', render);
   window.addEventListener('resize', function () { document.documentElement.style.setProperty('--sb-h', $sb.offsetHeight + 'px'); });
   // Keep two open tabs from silently overwriting each other's scores.

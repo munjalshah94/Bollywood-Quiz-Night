@@ -32,6 +32,34 @@
     </form>
   </dialog>
 
+  <dialog id="help" aria-labelledby="help-title">
+    <div class="help-head">
+      <h2 id="help-title">How to play: controls</h2>
+      <button type="button" class="help-x" id="help-x" aria-label="Close">&times;</button>
+    </div>
+    <h3>Keyboard</h3>
+    <dl class="keys">
+      <dt><kbd>Space</kbd> <kbd>Enter</kbd></dt><dd>Start the show or a round, reveal the answer on a clue, start the charades timer</dd>
+      <dt><kbd>Esc</kbd></dt><dd>Go back one step: answer or clue, then board, then menu, then home</dd>
+      <dt><kbd>M</kbd></dt><dd>Open the round menu</dd>
+      <dt><kbd>H</kbd></dt><dd>Show the next hint (it asks &ldquo;Are you sure?&rdquo; first)</dd>
+      <dt><kbd>R</kbd></dt><dd>Restart the charades timer</dd>
+      <dt><kbd>?</kbd></dt><dd>Open this guide (home page)</dd>
+    </dl>
+    <h3>On screen</h3>
+    <dl class="keys">
+      <dt>Tiles</dt><dd>Tap a tile to open its clue. Grey tiles are already played; tap one again to replay it.</dd>
+      <dt>Reveal answer</dt><dd>Shows the answer. <b>Back to board</b> returns to the tiles.</dd>
+      <dt>Hint</dt><dd>Reveals one hint at a time, after you confirm.</dd>
+      <dt>Pass</dt><dd>Hands the clue to the next team for a +10 bonus. If every team misses, it can go round again at half points.</dd>
+      <dt>Mark unused</dt><dd>Opened a tile by mistake? Put it back on the board.</dd>
+      <dt>Menu</dt><dd>The button at the top right always returns to the round menu.</dd>
+      <dt>Scoreboard</dt><dd>Use plus and minus to score, or type a score. &ldquo;Tap = &plusmn;&rdquo; sets the step, &ldquo;Teams&rdquo; sets 2 to 6 teams, and names are editable. On a phone, tap &ldquo;Show scores&rdquo;.</dd>
+      <dt>Reset game</dt><dd>Clears scores and played tiles after a confirmation.</dd>
+    </dl>
+    <div class="dlg-actions"><button type="button" class="btn btn-teal" id="help-close">Got it</button></div>
+  </dialog>
+
   <noscript><p style="padding:2rem;font:1.2rem sans-serif">This quiz needs JavaScript.</p></noscript>
   <script src="js/app.js"></script>
 </body>

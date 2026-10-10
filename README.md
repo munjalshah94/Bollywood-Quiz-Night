@@ -24,7 +24,7 @@ https://munjalshah94.github.io/Bollywood-Quiz-Night/
 - **The pass rule, twice round.** Stuck? Pass the clue to the next team; every pass adds a +10 bonus for whoever answers it. If every team misses, the clue can go round a second time at half points, rounded to the nearest ten.
 - **Hints, only if you ask.** Tough picture, emoji and song clues can reveal up to two hints, broad first, narrow second, without giving the answer away. Hints stay hidden until you press Hint (or `H`) and confirm "Are you sure?". They can be free or cost a share of the points.
 - **A real countdown.** A proper 30-second timer with start, restart, a final beep and a flashing "TIME!".
-- **Keyboard friendly.** Space or Enter reveals, `H` gives a hint, Esc goes back and `M` opens the menu.
+- **Keyboard friendly.** Space or Enter reveals, `H` gives a hint, Esc goes back and `M` opens the menu. Tap the **?** on the home page for a quick guide to every control.
 - **Never loses your game.** Scores, team names and played tiles are saved in the browser. Reset anytime, with a confirmation.
 - **Finish with a flourish.** An end screen crowns the winning team.
 - **Nothing to install.** Plain web page, no accounts, no downloads.
