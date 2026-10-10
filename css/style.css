@@ -276,6 +276,25 @@ dialog h2 { color: var(--maroon); font-size: 1.5rem; margin-bottom: .5rem; }
 dialog p { margin: 0 0 1.2rem; }
 .dlg-actions { display: flex; gap: .6rem; justify-content: flex-end; }
 
+/* ---------- "?" controls help ---------- */
+.help-btn {
+  position: absolute; top: 1rem; right: 1rem; z-index: 2; width: 3rem; height: 3rem; border-radius: 50%; cursor: pointer;
+  font: 900 1.5rem/1 "Trebuchet MS", "Segoe UI", system-ui, sans-serif; color: var(--white); background: var(--navy);
+  border: .18rem solid var(--gold); box-shadow: var(--shadow); transition: transform .1s ease, filter .15s ease;
+}
+.help-btn:hover { filter: brightness(1.15); transform: scale(1.06); }
+.help-btn:focus-visible { outline: .22rem solid var(--gold); outline-offset: .15rem; }
+#help { width: min(44rem, 94vw); max-width: none; max-height: 90vh; overflow-y: auto; font-size: .92rem; padding-top: 1.1rem; padding-bottom: 1.1rem; }
+.help-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .6rem; }
+.help-head h2 { margin: 0; }
+.help-x { flex: none; width: 2.4rem; height: 2.4rem; border-radius: 50%; border: 0; cursor: pointer; background: var(--navy); color: var(--white); font: 700 1.5rem/1 system-ui, sans-serif; }
+.help-x:focus-visible { outline: .2rem solid var(--gold); outline-offset: .1rem; }
+#help h3 { margin: .8rem 0 .35rem; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+.keys { display: grid; grid-template-columns: 9.5rem 1fr; gap: .35rem 1rem; margin: 0; align-items: baseline; }
+.keys dt { font-weight: 800; color: var(--maroon); white-space: nowrap; }
+.keys dd { margin: 0; line-height: 1.35; }
+kbd { display: inline-block; min-width: 1.8em; text-align: center; padding: .05rem .45rem; margin-right: .15rem; border: .12rem solid var(--maroon); border-bottom-width: .25rem; border-radius: .4rem; background: var(--cream); color: var(--ink); font: 700 .9em ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
 /* ---------- small screens ---------- */
 @media (max-width: 760px) {
   html { font-size: 15px; }
@@ -301,6 +320,9 @@ dialog p { margin: 0 0 1.2rem; }
   .sb-toggle { display: inline-flex; }
   .team .tscore { font-size: 1.5rem; }
   .podium li { font-size: 1rem; }
+  .help-btn { top: .7rem; right: .7rem; }
+  .keys { grid-template-columns: 1fr; gap: .1rem; }
+  .keys dd { margin-bottom: .5rem; }
 }
 @media (max-width: 420px) {
   .cat-head b { font-size: .62rem; letter-spacing: -.01em; }
