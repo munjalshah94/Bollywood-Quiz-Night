@@ -149,7 +149,7 @@
   function runFor(info) {
     var wasUsed = !!state.used[info.clue.id];
     if (!state.run || state.run.id !== info.clue.id) {
-      state.run = { id: info.clue.id, passes: 0, asker: state.turn, advance: !wasUsed };
+      state.run = { id: info.clue.id, passes: 0, hints: 0, asker: state.turn, advance: !wasUsed };
     }
     return state.run;
   }
@@ -158,10 +158,27 @@
     if (r.name !== 'clue' && r.name !== 'answer') return -1;
     return state.run && state.run.id === r.arg ? (state.run.asker + state.run.passes) % state.n : -1;
   }
+  /* ---- hints: revealed one at a time, optionally costing a share of the clue's points ---- */
+  var hintUI = null;   // set by the clue screen so the H key can reach it
+  function hintCfg() { return quiz.hints || { enabled: false, penaltyPercent: 0 }; }
+  function clueHints(c) { return hintCfg().enabled && Array.isArray(c.hints) ? c.hints.filter(Boolean) : []; }
+  function hintCost(c) { var pct = Number(hintCfg().penaltyPercent) || 0; return Math.max(0, Math.round(c.points * pct / 100 / 5) * 5); }
+  function runOf(info) { return state.run && state.run.id === info.clue.id ? state.run : null; }
+  function hintsUsed(info) { var run = runOf(info); return run ? Math.min(run.hints | 0, clueHints(info.clue).length) : 0; }
+  /* What the answering team earns now: points + 10 per pass - hint cost (never below 0). */
+  function clueValue(info) {
+    var run = runOf(info);
+    var gross = info.clue.points + 10 * (run ? run.passes : 0);
+    return Math.max(0, gross - hintsUsed(info) * hintCost(info.clue));
+  }
+  function revealHint() {
+    if (hintUI && parseHash().name === 'clue') hintUI.reveal();
+  }
+
   function stepValue() {
     if (state.step !== 'auto') return Number(state.step);
     var info = currentClueInfo();
-    if (info) return info.clue.points + 10 * ((state.run && state.run.id === info.clue.id) ? state.run.passes : 0);
+    if (info) return clueValue(info);
     return 10;
   }
   function adjust(i, sign) {
@@ -312,11 +329,15 @@
     return fig;
   }
 
-  function imagesBlock(list, role, overlays, solo) {
+  /* Clue images always get a neutral alt ("Clue image"): the deck's alt text is the source page title and can give the answer away.
+     Answer images may use it, because they only ever exist in the DOM on the answer view. */
+  function imagesBlock(list, role, overlays, solo, descriptive) {
     if (!list || !list.length) return null;
     var box = el('div', { class: 'imgs' + (solo ? ' solo' : '') });
     list.forEach(function (img, i) {
-      box.appendChild(figure(img, role + (list.length > 1 ? ' ' + (i + 1) : ''), overlays));
+      var alt = role + (list.length > 1 ? ' ' + (i + 1) : '');
+      if (descriptive && img.source) alt = img.source;
+      box.appendChild(figure(img, alt, overlays));
     });
     return box;
   }
@@ -496,7 +517,23 @@
     var hasImgs = c.clueImages && c.clueImages.length;
     var nImg = (c.clueImages || []).length;
     var txt = prompt ? el('div', { class: 'clue-text ' + textClass(info, prompt), text: prompt }) : null;
-    if (txt && r.kind === 'verse') txt.style.setProperty('--lines', String(prompt.split('\n').length));
+    if (txt && r.kind === 'verse') {
+      var vl = prompt.split('\n');
+      txt.style.setProperty('--lines', String(vl.length));
+      if (vl.length >= 10) {
+        // Long verse: two blocks split at the stanza break that balances them best, shown side by side while a hint is open.
+        // The two blocks add up to exactly the original text.
+        var split = Math.ceil(vl.length / 2), best = Infinity;
+        vl.forEach(function (ln, i) {
+          if (ln.trim() === '' && i + 1 < vl.length && Math.abs((i + 1) - (vl.length - i - 1)) < best) { best = Math.abs((i + 1) - (vl.length - i - 1)); split = i + 1; }
+        });
+        txt.textContent = '';
+        txt.classList.add('cols');
+        txt.appendChild(el('span', { class: 'vcol', text: vl.slice(0, split).join('\n') + '\n' }));
+        txt.appendChild(el('span', { class: 'vcol', text: vl.slice(split).join('\n') }));
+        txt.style.setProperty('--rows', String(Math.max(split, vl.length - split)));
+      }
+    }
     var body = el('div', { class: 'clue-body' + (prompt && (nImg > 1 || (nImg && prompt.length > 150)) ? ' stack' : '') },
       txt,
       imagesBlock(c.clueImages, 'Clue image', c.overlays, !prompt));
@@ -505,9 +542,24 @@
       body);
     if (!prompt && !hasImgs) card.appendChild(el('div', { class: 'clue-text', text: '—' }));
 
-    var node = el('section', { class: 'clue' }, card, runChip(info, run),
+    // hints stay hidden until the Hint button (or H) is used
+    var hints = clueHints(c);
+    var hintBtn = null, hintBox = null;
+    if (hints.length) {
+      var cost = hintCost(c);
+      var hintCount = el('div', { class: 'hint-count' });
+      var hintList = el('ol', { class: 'hint-list' });
+      hintBox = el('div', { class: 'hint-box', 'aria-live': 'polite', hidden: true }, hintCount, hintList);
+      hintBtn = el('button', { type: 'button', class: 'btn btn-lg btn-gold', id: 'btn-hint', onclick: revealHint,
+        title: 'Reveal the next hint (H)' + (cost ? ' \u2014 costs ' + cost + ' points if the clue is awarded' : '') });
+      card.appendChild(hintBox);
+    }
+
+    var chip = runChip(info);
+    var node = el('section', { class: 'clue' }, card, chip,
       el('div', { class: 'actions' },
         el('button', { type: 'button', class: 'btn btn-lg', id: 'btn-reveal', onclick: function () { go('#/answer/' + c.id); } }, 'Reveal answer'),
+        hintBtn,
         el('button', { type: 'button', class: 'btn btn-lg btn-coral', onclick: passClue, title: 'Pass to the next team (+10)' }, 'Pass ↪ +10'),
         el('button', { type: 'button', class: 'btn btn-lg btn-teal', onclick: backToBoard }, 'Back to board'),
         run.advance ? el('button', { type: 'button', class: 'btn btn-sm btn-ghost', id: 'btn-unuse',
@@ -515,14 +567,52 @@
           onclick: function () { delete state.used[c.id]; state.run = null; save(); toast('Tile put back on the board.'); go('#/board/' + r.id); } },
           'Mark unused') : null));
     mount(node);
+
+    if (hints.length) {
+      var paint = function () {
+        var n = hintsUsed(info), total = hints.length, cost = hintCost(c);
+        hintList.replaceChildren();
+        hints.slice(0, n).forEach(function (h, i) {
+          hintList.appendChild(el('li', null, el('b', { text: 'Hint ' + (i + 1) + ': ' }), document.createTextNode(h)));
+        });
+        hintBox.hidden = n === 0;
+        hintCount.textContent = n ? 'Hint ' + n + ' of ' + total : '';
+        hintBtn.disabled = n >= total;
+        hintBtn.textContent = n >= total ? 'No more hints' : 'Hint' + (cost ? ' (\u2212' + cost + ')' : '');
+        node.classList.toggle('hints-open', n > 0);
+        if (chip && chip.chip) chip.chip.textContent = chipText(info);
+      };
+      hintUI = {
+        reveal: function () {
+          var run = runOf(info);
+          if (!run || (run.hints | 0) >= hints.length) return;
+          run.hints = (run.hints | 0) + 1;
+          save();
+          paint();
+          renderScoreboard();   // the + buttons show the net value when hints cost points
+        }
+      };
+      paint();
+    }
   }
 
-  function runChip(info, run) {
-    if (!run || run.id !== info.clue.id) return null;
+  function chipText(info) {
+    var run = runOf(info);
+    if (!run) return '';
     var who = state.teams[(run.asker + run.passes) % state.n].name;
-    var worth = info.clue.points + 10 * run.passes;
-    var txt = 'Answering: ' + who + ' · worth ' + worth + (run.passes ? ' (incl. +' + (10 * run.passes) + ' pass bonus)' : '');
-    return el('div', { style: 'text-align:center;margin-top:.8rem' }, el('span', { class: 'run-chip', text: txt }));
+    var used = hintsUsed(info), cost = hintCost(info.clue) * used;
+    var notes = [];
+    if (run.passes) notes.push('+' + (10 * run.passes) + ' pass bonus');
+    if (cost) notes.push('\u2212' + cost + ' for ' + used + (used === 1 ? ' hint' : ' hints'));
+    return 'Answering: ' + who + ' \u00b7 worth ' + clueValue(info) + (notes.length ? ' (' + notes.join(', ') + ')' : '');
+  }
+
+  function runChip(info) {
+    if (!runOf(info)) return null;
+    var span = el('span', { class: 'run-chip', text: chipText(info) });
+    var wrap = el('div', { style: 'text-align:center;margin-top:.8rem' }, span);
+    wrap.chip = span;
+    return wrap;
   }
 
   function screenAnswer(info) {
@@ -536,10 +626,10 @@
     var nAns = (c.answerImages || []).length;
     var body = el('div', { class: 'clue-body' + (ans && (nAns > 1 || (nAns && ans.length > 90)) ? ' stack' : '') },
       ans ? el('div', { class: 'clue-text answer' + (ans.length > 70 ? ' long' : ''), text: ans }) : null,
-      imagesBlock(c.answerImages, 'Answer image', null, !ans));
+      imagesBlock(c.answerImages, 'Answer image', null, !ans, true));
     var card = el('div', { class: 'card clue-card' + (r.id % 2 === 0 ? ' teal' : '') },
       el('div', { class: 'clue-label', text: 'Correct answer' }), body);
-    var node = el('section', { class: 'clue' }, card, runChip(info, run),
+    var node = el('section', { class: 'clue' }, card, runChip(info),
       el('div', { class: 'actions' },
         el('button', { type: 'button', class: 'btn btn-lg btn-teal', id: 'btn-back', onclick: backToBoard }, 'Back to board')));
     mount(node);
@@ -685,6 +775,7 @@
   /* ---------------------------------------------------------------- render */
   function render() {
     stopTimer();
+    hintUI = null;
     var old = document.querySelector('.confetti');
     if (old) old.remove();
     var r = parseHash();
@@ -747,6 +838,7 @@
       }
       return;
     }
+    if ((key === 'h' || key === 'H') && r.name === 'clue') { e.preventDefault(); return revealHint(); }
     if ((key === 'r' || key === 'R') && r.name === 'timer' && timer.api) { e.preventDefault(); timer.api.reset(); timer.api.start(); }
   });
   // Stop Space on a focused button from also firing a click after we've handled it.

@@ -189,6 +189,20 @@ h1, h2, h3, h4 { font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
 }
 .run-chip { font-size: .9rem; font-weight: 800; background: var(--cream); border: .15rem solid var(--gold); padding: .3rem .9rem; border-radius: 2rem; }
 
+/* ---------- hints ---------- */
+.hint-box { width: 100%; max-width: 62rem; background: var(--cream); border: .15rem solid var(--gold); border-radius: .9rem; padding: .5rem 1rem .6rem; text-align: left; }
+.hint-count { font-size: .75rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--maroon); }
+.hint-list { margin: .2rem 0 0; padding: 0; list-style: none; display: grid; gap: .25rem; font-size: clamp(1rem, min(2.6vh, 1.6vw) + .1rem, 1.7rem); font-weight: 600; }
+.hint-list b { color: var(--pink); }
+/* leave room for the hint box so images and verses still fit the screen without scrolling */
+.clue.hints-open { --avail: max(10rem, calc(100vh - var(--sb-h) - 31rem)); }
+@supports (height: 100dvh) { .clue.hints-open { --avail: max(10rem, calc(100dvh - var(--sb-h) - 31rem)); } }
+.clue.hints-open .clue-body.stack .imgs { --imgh: calc(var(--avail) * .4); }
+.clue.hints-open .clue-text.verse.cols { display: grid; grid-template-columns: auto auto; justify-content: center; column-gap: 4rem; font-size: clamp(.9rem, min(calc(var(--avail) * .85 / (var(--rows, 6) * 1.4)), 1.3vw), 2rem); }
+.clue.hints-open .clue-text.verse.cols .vcol { display: block; }
+.clue.hints-open .clue-text:not(.emoji):not(.verse):not(.answer) { font-size: clamp(1rem, min(2.3vh, 1.6vw) + .1rem, 1.7rem); }
+@media (max-width: 760px) { .clue.hints-open .clue-text.verse.cols { display: block; font-size: 1.15rem; } .clue.hints-open .clue-text.verse.cols .vcol { display: inline; } }
+
 /* ---------- timer ---------- */
 .timer { width: 100%; max-width: 70rem; margin: 0 auto; text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
 .timer .digits { font-size: clamp(7rem, min(36vh, 30vw), 24rem); font-weight: 900; line-height: .95; color: var(--pink); font-variant-numeric: tabular-nums; }
