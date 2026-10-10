@@ -421,7 +421,28 @@ used_slides.add(3)
 missing = sorted(set(range(1, 161)) - used_slides)
 assert not missing, missing
 
-json.dump(quiz, open(os.path.join(out, 'quiz.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+# Hand-edited content survives a re-extract: the hint config, each clue's hints, and answers the deck lacks
+# (round 5 Q8's answer is only an image in the deck; "83" was added by hand).
+quiz = {'hints': {'enabled': True, 'penaltyPercent': 0}, **quiz}
+prev_path = os.path.join(out, 'quiz.json')
+if os.path.exists(prev_path):
+    prev = json.load(open(prev_path, encoding='utf-8'))
+    quiz['hints'] = prev.get('hints', quiz['hints'])
+    prev_clues = {}
+    for r in prev['rounds']:
+        for c in [c for cat in r.get('categories', []) for c in cat['clues']] + r.get('clues', []):
+            prev_clues[c['id']] = c
+    for r in quiz['rounds']:
+        for c in [c for cat in r.get('categories', []) for c in cat['clues']] + r.get('clues', []):
+            old_c = prev_clues.get(c['id'], {})
+            c['hints'] = old_c.get('hints', [])
+            if not c.get('answer') and old_c.get('answer'):
+                c['answer'] = old_c['answer']
+else:
+    for r in quiz['rounds']:
+        for c in [c for cat in r.get('categories', []) for c in cat['clues']] + r.get('clues', []):
+            c['hints'] = []
+json.dump(quiz, open(prev_path, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # ---------------------------------------------------------------- image sources report
 SRC = re.compile(r'IMDb|Wikipedia|Prime Video|Britannica|Amazon\.com|Facebook|\br/|Peakpx|Spotify|Times of India|'

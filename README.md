@@ -1,69 +1,30 @@
-# Bollywood Quiz Night
+# 🎬 Bollywood Quiz Night
 
-A fun game for Bollywood based questions for your party.
+A fun game for Bollywood based questions for your party. Five rounds of filmi fun, built for a projector and playable on a phone.
 
-A static web app version of the five-round quiz deck. Plain HTML, CSS and JavaScript: no framework, no build step.
-Built for a projector (big text, scales up to 4K) and works on a phone.
+## ▶️ [Play now](https://munjalshah94.github.io/Bollywood-Quiz-Night/)
 
-## Rounds
+https://munjalshah94.github.io/Bollywood-Quiz-Night/
 
-1. **Lights, Camera, Confusion**: board of 5 categories × 6 clues (10 / 20 / 40 / 60 / 100 / 150)
-2. **Emoji Movies**: 12 emoji clues, 50 each
-3. **Second Verse Songs**: 8 verses, 75 each
-4. **Charades Timer**: real 30-second countdown
-5. **Quiz Questions**: 8 questions, 100 each
+## The game
 
-## Using it
-
-- Pick a round from the menu, open a tile, **Reveal answer**, then **Back to board**. Used tiles turn grey.
-- **Scoreboard** (bottom): 2–6 teams, editable names, `+` / `−` buttons, and an editable score box.
-  Outside a clue the buttons change the score by the "Tap = ±" step. Inside a clue they use the clue's value.
-- **Pass**: the deck's rule is "questions pass from one team to another (+10 points for pass)". Pressing Pass hands the
-  clue to the next team and adds 10 to what it is worth for each pass (so a 100-point clue passed once is worth 110).
-  Award it with the answering team's `+` button.
-- **Reset game** clears scores and tiles after a confirmation. Team names are kept.
-- State (used tiles, scores, team names, team count) is saved in the browser's `localStorage`.
-
-| Key | Action |
+| Round | What happens |
 |---|---|
-| Space / Enter | Reveal the answer (clue screen); start the timer (timer screen) |
-| Esc | Back (answer/clue → board → menu → title) |
-| M | Round menu |
-| R | Restart the timer |
+| **1. Lights, Camera, Confusion** | A Jeoparty-style board: 5 categories × 6 clues worth 10 to 150 points. Badly explained blockbusters, baby-photo "Pehchan Kaun?", minimalist posters, animals in movies and Bollywood duos. |
+| **2. Emoji Movies** | Twelve emoji strings, one movie each. 50 points apiece. |
+| **3. Second Verse Songs** | Eight second verses, name the song. 75 points apiece. |
+| **4. Charades** | A big 30-second countdown for acting out titles, with a "TIME!" finish. |
+| **5. Quiz Questions** | Eight proper trivia questions, including picture-connect puzzles. 100 points apiece. |
 
-## Run locally
+## The app
 
-`quiz.json` is loaded with `fetch`, so serve the folder rather than opening the file directly:
-
-```sh
-python3 -m http.server 8000   # then visit http://localhost:8000/
-```
-
-## Layout
-
-```
-index.html        page shell
-css/style.css     theme (colours taken from the deck)
-js/app.js         the whole app
-quiz.json         all content: rules, clues, answers, image references
-assets/           optimised images (WebP) + the animated clip (WebM/MP4)
-tools/extract.py  one-off script that rebuilt quiz.json and assets/ from the .pptx
-docs/             deck structure notes, image source list
-```
-
-All paths are relative, so it works from any sub-path such as `username.github.io/<repo>/`.
-
-## Regenerating content from the deck
-
-Only needed if the .pptx changes. Needs Python 3, Pillow and ffmpeg:
-
-```sh
-python3 tools/extract.py path/to/Bollywood_Quiz_5_Round_Template.pptx .
-```
-
-## Things to know
-
-- **Answers are in the page source.** This is a static site, so `quiz.json` contains every answer. Fine for a party; don't use it
-  where people might peek.
-- **Image sources.** Many pictures came from the web (IMDb, Wikipedia, Reddit, news sites, shops).
-  See [`docs/image-sources.md`](docs/image-sources.md) and check licensing before sharing the site widely.
+- **Made for the room.** Huge, readable text that scales up for a projector and down to a phone. Pastel Bollywood cinema look, taken from the original deck.
+- **Boards that remember.** Tiles turn grey once played, so nobody repeats a clue. Reveal the answer when you're ready, then head back to the board.
+- **Scoreboard for 2 to 6 teams.** Rename teams, tap plus and minus, or type a score directly. The team whose turn it is stays highlighted.
+- **The pass rule.** Stuck? Pass the clue to the next team. Every pass adds a +10 bonus for whoever answers it.
+- **Hints, if you want them.** Tough picture, emoji and song clues can reveal up to two hints, broad first, narrow second, without giving the answer away. Hints can be free or cost a share of the points.
+- **A real countdown.** A proper 30-second timer with start, restart, a final beep and a flashing "TIME!".
+- **Keyboard friendly.** Space or Enter reveals, `H` gives a hint, Esc goes back and `M` opens the menu.
+- **Never loses your game.** Scores, team names and played tiles are saved in the browser. Reset anytime, with a confirmation.
+- **Finish with a flourish.** An end screen crowns the winning team.
+- **Nothing to install.** Plain web page, no accounts, no downloads.
